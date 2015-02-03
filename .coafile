@@ -1,0 +1,5 @@
+rec_dirs = ./samples
+files_regex = .*.c
+rec_bear_dirs = ./src
+bears = ClangASTBear
+log_level = DEBUG

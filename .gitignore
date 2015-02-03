@@ -1,0 +1,12 @@
+.idea
+__pycache__
+*~
+build
+*.mo
+dist
+MANIFEST
+*.pyc
+.coverage
+*.patch
+_build
+coverage.xml
