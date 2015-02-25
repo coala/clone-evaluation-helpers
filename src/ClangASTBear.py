@@ -11,8 +11,8 @@ class ClangASTBear(LocalBear):
             return
 
         self.debug_msg(indent + "Got child:")
-        self.debug_msg(indent + "KIND:", cursor.kind)
-        self.debug_msg(indent + "LOC :", cursor.location)
+        self.debug_msg(indent + "KIND:", str(cursor.kind))
+        self.debug_msg(indent + "LOC :", str(cursor.location))
 
         for child in cursor.get_children():
             self.print_clang_cursor(child, indent+"| ")
