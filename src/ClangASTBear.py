@@ -17,7 +17,7 @@ class ClangASTBear(LocalBear):
         for child in cursor.get_children():
             self.print_clang_cursor(child, indent+"| ")
 
-    def run_bear(self, filename, file, *args):
+    def run(self, filename, file, *args):
         index = clang.cindex.Index.create()
         tree = index.parse(filename)
         self.debug_msg(str(tree.spelling))
