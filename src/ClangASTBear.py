@@ -17,7 +17,7 @@ class ClangASTBear(LocalBear):
             return
 
         file = cursor.location.file
-        name = "(No location)" if file is None else file.name.decode()
+        name = None if file is None else file.name.decode()
 
         if str(name) == str(filename):
             self.debug_msg(indent + "Got child:")
