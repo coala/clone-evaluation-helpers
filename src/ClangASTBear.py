@@ -1,5 +1,5 @@
 from coalib.bears.LocalBear import LocalBear
-import clang.cindex
+import clang.cindex as ci
 
 
 class ClangASTBear(LocalBear):
@@ -32,7 +32,7 @@ class ClangASTBear(LocalBear):
             self.print_clang_cursor(child, filename, indent+"| ")
 
     def run(self, filename, file, *args):
-        index = clang.cindex.Index.create()
+        index = ci.Index.create()
         tree = index.parse(filename)
 
         self.print_clang_cursor(tree.cursor, filename)
