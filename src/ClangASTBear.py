@@ -3,10 +3,19 @@ import clang.cindex
 
 
 class ClangASTBear(LocalBear):
-    def print_clang_cursor(self, cursor, filename, indent=""):
+    def print_clang_cursor(self,
+                           cursor,
+                           filename,
+                           indent="",
+                           stack=None,
+                           max_recursion=20):
+        if stack is None:
+            stack = []
         if cursor is None:
+            print("GOT NONE")
             return
-        if len(indent) > 40:
+
+        if len(indent) > max_recursion*2:
             print("ABORTING")
             return
 
