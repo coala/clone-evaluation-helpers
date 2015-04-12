@@ -11,9 +11,6 @@ class ClangASTBear(LocalBear):
                            max_recursion=20):
         if stack is None:
             stack = []
-        if cursor is None:
-            print("GOT NONE")
-            return
 
         if len(indent) > max_recursion*2:
             print("ABORTING")
