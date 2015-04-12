@@ -21,6 +21,7 @@ class ClangASTBear(LocalBear):
 
         if str(name) == str(filename):
             self.debug_msg(indent + "Got child:")
+            self.debug_msg(indent + "STACK:", *stack, delimiter="\n")
             self.debug_msg(indent + "KIND:", str(cursor.kind))
             self.debug_msg(indent + "FILE:", str(name))
             self.debug_msg(indent + "USR :", str(cursor.get_usr()))
@@ -28,8 +29,10 @@ class ClangASTBear(LocalBear):
             if cursor.is_definition():
                 self.debug_msg(indent + "DEFI:", str(cursor.get_definition()))
 
+        stack.append(str(cursor.kind))
         for child in cursor.get_children():
-            self.print_clang_cursor(child, filename, indent+"| ")
+            self.print_clang_cursor(child, filename, indent+"| ", stack=stack)
+        stack.pop()
 
     def run(self, filename, file, *args):
         index = ci.Index.create()
