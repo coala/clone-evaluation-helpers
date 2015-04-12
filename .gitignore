@@ -10,3 +10,4 @@ MANIFEST
 *.patch
 _build
 coverage.xml
+*.pyc
