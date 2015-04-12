@@ -17,6 +17,10 @@ class ClangASTBear(LocalBear):
             self.debug_msg(indent + "Got child:")
             self.debug_msg(indent + "KIND:", str(cursor.kind))
             self.debug_msg(indent + "FILE:", str(name))
+            self.debug_msg(indent + "USR :", str(cursor.get_usr()))
+            self.debug_msg(indent + "DISP:", str(cursor.displayname))
+            if cursor.is_definition():
+                self.debug_msg(indent + "DEFI:", str(cursor.get_definition()))
 
         for child in cursor.get_children():
             self.print_clang_cursor(child, filename, indent+"| ")
