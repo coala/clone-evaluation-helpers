@@ -3,6 +3,30 @@ import clang.cindex as ci
 
 
 class ClangASTBear(LocalBear):
+    def analyze_function(self,
+                           cursor,
+                           filename,
+                           stack=None):
+        if stack is None:
+            stack = []
+        file = cursor.location.file
+        name = None if file is None else file.name.decode()
+
+        if str(name) == str(filename):
+            self.debug_msg("Got child:")
+            self.debug_msg("STACK:", *stack, delimiter="\n")
+            self.debug_msg("KIND:", str(cursor.kind))
+            self.debug_msg("FILE:", str(name))
+            self.debug_msg("USR :", str(cursor.get_usr()))
+            self.debug_msg("DISP:", str(cursor.displayname))
+            if cursor.is_definition():
+                self.debug_msg("DEFI:", str(cursor.get_definition()))
+
+        stack.append(str(cursor.kind))
+        for child in cursor.get_children():
+            self.print_clang_cursor(child, filename, stack=stack)
+        stack.pop()
+
     def print_clang_cursor(self,
                            cursor,
                            filename,
@@ -16,23 +40,12 @@ class ClangASTBear(LocalBear):
             print("ABORTING")
             return
 
-        file = cursor.location.file
-        name = None if file is None else file.name.decode()
-
-        if str(name) == str(filename):
-            self.debug_msg(indent + "Got child:")
-            self.debug_msg(indent + "STACK:", *stack, delimiter="\n")
-            self.debug_msg(indent + "KIND:", str(cursor.kind))
-            self.debug_msg(indent + "FILE:", str(name))
-            self.debug_msg(indent + "USR :", str(cursor.get_usr()))
-            self.debug_msg(indent + "DISP:", str(cursor.displayname))
-            if cursor.is_definition():
-                self.debug_msg(indent + "DEFI:", str(cursor.get_definition()))
-
-        stack.append(str(cursor.kind))
-        for child in cursor.get_children():
-            self.print_clang_cursor(child, filename, indent+"| ", stack=stack)
-        stack.pop()
+        if cursor.kind == ci.CursorKind.DECL_REF_EXPR:
+            self.analyze_function(cursor,
+                                  filename)
+        else:
+            for child in cursor.get_children():
+                self.print_clang_cursor(child, filename, stack=stack)
 
     def run(self, filename, file, *args):
         index = ci.Index.create()
