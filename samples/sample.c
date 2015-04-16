@@ -3,8 +3,10 @@
 
 int test(void);
 
+int g;
+
 int main(int t) {
-    smile(t);
+    smile(t, g);
     for(int i; i < 5; i++) {
         printf("i is %d", i);
     }
