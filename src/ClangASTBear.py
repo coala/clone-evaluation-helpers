@@ -29,6 +29,12 @@ class VariableCount:
             if self.conditions[i](cursor, stack):
                 self.count_vector[i] += self.weightings[i]
 
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return "Name:" + self.name + " CV:" + str(self.count_vector)
+
 
 class ClangASTBear(LocalBear):
     @staticmethod
@@ -58,10 +64,14 @@ class ClangASTBear(LocalBear):
 
         if self.is_variable_declaration(cursor):
             self.warn("DECLARATION")
-            local_vars[cursor.displayname.decode()] = 0
+            local_vars[cursor.displayname.decode()] = VariableCount(
+                cursor.displayname.decode(),
+                conditions,
+                weightings)
 
         if self.is_variable_reference(cursor, local_vars):
-            local_vars[cursor.displayname.decode()] += 1
+            local_vars[cursor.displayname.decode()].count_reference(cursor,
+                                                                    stack)
 
         self.debug(len(stack)*"|", "Got child:")
         self.debug(len(stack)*"|",
@@ -96,7 +106,10 @@ class ClangASTBear(LocalBear):
         name = None if file is None else file.name.decode()
 
         if self.is_variable_declaration(cursor):
-            global_vars[cursor.displayname.decode()] = 0
+            global_vars[cursor.displayname.decode()] = VariableCount(
+                cursor.displayname.decode(),
+                conditions,
+                weightings)
 
         if str(name) == str(filename) and self.is_function_declaration(cursor):
             global_vars = self.get_variables(cursor,
@@ -117,4 +130,6 @@ class ClangASTBear(LocalBear):
         index = ci.Index.create()
         tree = index.parse(filename)
 
-        self.debug(str(self.get_vectors(tree.cursor, filename)))
+        self.debug(str(self.get_vectors(tree.cursor,
+                                        filename,
+                                        conditions=[lambda cursor, stack: True])))
