@@ -7,8 +7,8 @@ class ClangASTBear(LocalBear):
         return cursor.kind == ci.CursorKind.FUNCTION_DECL
 
     def get_variables(self,
-                   cursor,
-                   stack=None):
+                      cursor,
+                      stack=None):
         if stack is None:
             stack = []
 
