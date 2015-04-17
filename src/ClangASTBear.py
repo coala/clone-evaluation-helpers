@@ -1,6 +1,35 @@
 from coalib.bears.LocalBear import LocalBear
 import clang.cindex as ci
 
+
+class VariableCount:
+    def __init__(self, name, conditions=None, weightings=None):
+        """
+        Creates a new VariableCount object.
+
+        :param name:       The name of the variable in the original code.
+        :param conditions: The counting conditions as list of function objects,
+                           each shall return true when getting a clang cursor
+                           and a stack containing all clang CursorKind objects
+                           that should be counted.
+        :param weightings: Optional factors to weight counting conditions.
+                           Defaults to 1 for all conditions.
+        """
+        self.name = name
+        self.conditions = conditions if conditions is not None else []
+        self.count_vector = [0 for elem in self.conditions]
+        self.weightings = weightings
+        if self.weightings is None:
+            self.weightings = [1 for elem in self.conditions]
+
+        assert len(self.count_vector) is len(self.weightings)
+
+    def count_reference(self, cursor, stack):
+        for i in range(len(self.conditions)):
+            if self.conditions[i](cursor, stack):
+                self.count_vector[i] += self.weightings[i]
+
+
 class ClangASTBear(LocalBear):
     @staticmethod
     def is_function_declaration(cursor):
