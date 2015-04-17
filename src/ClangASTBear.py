@@ -13,7 +13,9 @@ class ClangASTBear(LocalBear):
             stack = []
 
         self.debug(len(stack)*"|", "Got child:")
-        self.debug(len(stack)*"|", "SCOP:", str(stack.count(ci.CursorKind.COMPOUND_STMT)))
+        self.debug(len(stack)*"|",
+                   "SCOP:",
+                   str(stack.count(ci.CursorKind.COMPOUND_STMT)))
         self.debug(len(stack)*"|", "KIND:", str(cursor.kind))
         self.debug(len(stack)*"|", "USR :", str(cursor.get_usr()))
         self.debug(len(stack)*"|", "DISP:", str(cursor.displayname))
