@@ -28,13 +28,13 @@ coala
  * Print clang AST
  * Retrieve variable declarations
  * Count variable usages within functions
-
-## TODO until April 26:
-
  * Create a variable data structure (i.e. object) holding
    * Definition information
    * Name
    * Counts under different conditions
+
+## TODO until April 26:
+
  * Introduce Counting Conditions (dynamically, via function objects)
  * Cleanup
  * Write unittests
