@@ -1,7 +1,10 @@
 # What is This?
 
-This repository holds a bear that generates an AST for some languages via
-clang.
+This repository is a development repository for count matrix based code clone
+detection for coala.
+
+See
+http://www.callowbird.com/uploads/8/6/6/4/8664563/cmcd_count_matrix_based_code_clone_detection.pdf
 
 # Usage
 
