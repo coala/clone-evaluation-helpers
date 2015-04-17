@@ -48,6 +48,8 @@ class ClangASTBear(LocalBear):
     def get_variables(self,
                       cursor,
                       local_vars=None,
+                      conditions=None,
+                      weightings=None,
                       stack=None):
         if stack is None:
             stack = []
@@ -73,7 +75,11 @@ class ClangASTBear(LocalBear):
 
         stack.append(cursor.kind)
         for child in cursor.get_children():
-            local_vars = self.get_variables(child, local_vars, stack)
+            local_vars = self.get_variables(child,
+                                            local_vars,
+                                            conditions,
+                                            weightings,
+                                            stack)
         stack.pop()
 
         return local_vars
@@ -81,7 +87,9 @@ class ClangASTBear(LocalBear):
     def get_vectors(self,
                     cursor,
                     filename,
-                    global_vars=None):
+                    global_vars=None,
+                    conditions=None,
+                    weightings=None):
         if global_vars is None:
             global_vars = {}
         file = cursor.location.file
@@ -91,10 +99,17 @@ class ClangASTBear(LocalBear):
             global_vars[cursor.displayname.decode()] = 0
 
         if str(name) == str(filename) and self.is_function_declaration(cursor):
-            global_vars = self.get_variables(cursor, global_vars)
+            global_vars = self.get_variables(cursor,
+                                             global_vars,
+                                             conditions,
+                                             weightings)
         else:
             for child in cursor.get_children():
-                global_vars = self.get_vectors(child, filename, global_vars)
+                global_vars = self.get_vectors(child,
+                                               filename,
+                                               global_vars,
+                                               conditions,
+                                               weightings)
 
         return global_vars
 
