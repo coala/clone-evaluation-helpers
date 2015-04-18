@@ -1,6 +1,6 @@
 from coalib.bears.LocalBear import LocalBear
 from bears.codeclone_detection.CountVector import CountVector
-import clang.cindex as ci
+from coalib.bearlib.parsing.clang import cindex as ci
 
 
 class ClangASTBear(LocalBear):
