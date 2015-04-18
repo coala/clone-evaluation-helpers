@@ -1,4 +1,3 @@
 files = ./samples/*.c
 bear_dirs = ./src/**
 bears = ClangASTBear
-log_level = DEBUG

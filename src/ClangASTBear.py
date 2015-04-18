@@ -1,6 +1,7 @@
 from coalib.bears.LocalBear import LocalBear
 from bears.codeclone_detection.CountVector import CountVector
 from coalib.bearlib.parsing.clang import cindex as ci
+from coalib.results.Result import Result
 
 
 class ClangASTBear(LocalBear):
@@ -30,7 +31,6 @@ class ClangASTBear(LocalBear):
             local_vars = {}
 
         if self.is_variable_declaration(cursor):
-            self.warn("DECLARATION")
             local_vars[cursor.displayname.decode()] = CountVector(
                 cursor.displayname.decode(),
                 conditions,
@@ -97,6 +97,9 @@ class ClangASTBear(LocalBear):
         index = ci.Index.create()
         tree = index.parse(filename)
 
-        self.debug(str(self.get_vectors(tree.cursor,
-                                        filename,
-                                        conditions=[lambda cursor, stack: True])))
+        count_dict = self.get_vectors(tree.cursor,
+                                      filename,
+                                      conditions=[lambda cursor, stack: True])
+        return [Result(self.__class__.__name__,
+                       "COUNT DICT IS: " + str(count_dict),
+                       filename)]
