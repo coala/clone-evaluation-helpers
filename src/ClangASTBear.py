@@ -72,7 +72,7 @@ class ClangASTBear(LocalBear):
         file = cursor.location.file
         name = None if file is None else file.name.decode()
 
-        if self.is_variable_declaration(cursor):
+        if self.is_variable_declaration(cursor) and str(name) == str(filename):
             global_vars[cursor.displayname.decode()] = CountVector(
                 cursor.displayname.decode(),
                 conditions,
