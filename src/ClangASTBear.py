@@ -1,39 +1,6 @@
 from coalib.bears.LocalBear import LocalBear
+from bears.codeclone_detection.CountVector import CountVector
 import clang.cindex as ci
-
-
-class VariableCount:
-    def __init__(self, name, conditions=None, weightings=None):
-        """
-        Creates a new VariableCount object.
-
-        :param name:       The name of the variable in the original code.
-        :param conditions: The counting conditions as list of function objects,
-                           each shall return true when getting a clang cursor
-                           and a stack containing all clang CursorKind objects
-                           that should be counted.
-        :param weightings: Optional factors to weight counting conditions.
-                           Defaults to 1 for all conditions.
-        """
-        self.name = name
-        self.conditions = conditions if conditions is not None else []
-        self.count_vector = [0 for elem in self.conditions]
-        self.weightings = weightings
-        if self.weightings is None:
-            self.weightings = [1 for elem in self.conditions]
-
-        assert len(self.count_vector) is len(self.weightings)
-
-    def count_reference(self, cursor, stack):
-        for i in range(len(self.conditions)):
-            if self.conditions[i](cursor, stack):
-                self.count_vector[i] += self.weightings[i]
-
-    def __str__(self):
-        return self.__repr__()
-
-    def __repr__(self):
-        return "Name:" + self.name + " CV:" + str(self.count_vector)
 
 
 class ClangASTBear(LocalBear):
@@ -64,7 +31,7 @@ class ClangASTBear(LocalBear):
 
         if self.is_variable_declaration(cursor):
             self.warn("DECLARATION")
-            local_vars[cursor.displayname.decode()] = VariableCount(
+            local_vars[cursor.displayname.decode()] = CountVector(
                 cursor.displayname.decode(),
                 conditions,
                 weightings)
@@ -106,7 +73,7 @@ class ClangASTBear(LocalBear):
         name = None if file is None else file.name.decode()
 
         if self.is_variable_declaration(cursor):
-            global_vars[cursor.displayname.decode()] = VariableCount(
+            global_vars[cursor.displayname.decode()] = CountVector(
                 cursor.displayname.decode(),
                 conditions,
                 weightings)
