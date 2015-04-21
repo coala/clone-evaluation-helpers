@@ -4,6 +4,14 @@ from coalib.bearlib.parsing.clang import cindex as ci
 from coalib.results.Result import Result
 
 
+def no_condition(cursor, stack):
+    return True
+
+
+def is_call_argument(cursor, stack):
+    return ci.CursorKind.CALL_EXPR in stack
+
+
 class ClangASTBear(LocalBear):
     @staticmethod
     def is_function_declaration(cursor):
@@ -99,7 +107,8 @@ class ClangASTBear(LocalBear):
 
         count_dict = self.get_vectors(tree.cursor,
                                       filename,
-                                      conditions=[lambda cursor, stack: True])
+                                      conditions=[no_condition,
+                                                  is_call_argument])
         return [Result(self.__class__.__name__,
                        "COUNT DICT IS: " + str(count_dict),
                        filename)]
