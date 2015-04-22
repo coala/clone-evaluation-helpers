@@ -60,6 +60,7 @@ class ClangASTBear(LocalBear):
 
         if cursor.kind == ci.CursorKind.BINARY_OPERATOR:
             self.debug(len(stack)*"|", "EXTE:", str(cursor.extent))
+            ci.TokenGroup.get_tokens(cursor.translation_unit, cursor.extent)
 
         stack.append(cursor.kind)
         for child in cursor.get_children():
