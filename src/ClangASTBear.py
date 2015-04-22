@@ -58,6 +58,9 @@ class ClangASTBear(LocalBear):
         if cursor.is_definition():
             self.debug(len(stack)*"|", "DEFI:", str(cursor.get_definition()))
 
+        if cursor.kind == ci.CursorKind.BINARY_OPERATOR:
+            self.debug(len(stack)*"|", "EXTE:", str(cursor.extent))
+
         stack.append(cursor.kind)
         for child in cursor.get_children():
             local_vars = self.get_variables(child,
