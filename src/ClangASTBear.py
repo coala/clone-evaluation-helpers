@@ -4,12 +4,12 @@ from coalib.bearlib.parsing.clang import cindex as ci
 from coalib.results.Result import Result
 
 
-def no_condition(cursor, stack):
+def no_condition(cursor, kind_stack, cursor_stack):
     return True
 
 
-def is_call_argument(cursor, stack):
-    return ci.CursorKind.CALL_EXPR in stack
+def is_call_argument(cursor, kind_stack, cursor_stack):
+    return ci.CursorKind.CALL_EXPR in kind_stack
 
 
 class ClangASTBear(LocalBear):
@@ -32,9 +32,12 @@ class ClangASTBear(LocalBear):
                       local_vars=None,
                       conditions=None,
                       weightings=None,
-                      stack=None):
-        if stack is None:
-            stack = []
+                      kind_stack=None,
+                      cursor_stack=None):
+        if kind_stack is None:
+            kind_stack = []
+        if cursor_stack is None:
+            cursor_stack = []
         if local_vars is None:
             local_vars = {}
 
@@ -46,30 +49,34 @@ class ClangASTBear(LocalBear):
 
         if self.is_variable_reference(cursor, local_vars):
             local_vars[cursor.displayname.decode()].count_reference(cursor,
-                                                                    stack)
+                                                                    kind_stack,
+                                                                    cursor_stack)
 
-        self.debug(len(stack)*"|", "Got child:")
-        self.debug(len(stack)*"|",
+        self.debug(len(kind_stack)*"|", "Got child:")
+        self.debug(len(kind_stack)*"|",
                    "SCOP:",
-                   str(stack.count(ci.CursorKind.COMPOUND_STMT)))
-        self.debug(len(stack)*"|", "KIND:", str(cursor.kind))
-        self.debug(len(stack)*"|", "USR :", str(cursor.get_usr()))
-        self.debug(len(stack)*"|", "DISP:", str(cursor.displayname.decode()))
+                   str(kind_stack.count(ci.CursorKind.COMPOUND_STMT)))
+        self.debug(len(kind_stack)*"|", "KIND:", str(cursor.kind))
+        self.debug(len(kind_stack)*"|", "USR :", str(cursor.get_usr()))
+        self.debug(len(kind_stack)*"|", "DISP:", str(cursor.displayname.decode()))
         if cursor.is_definition():
-            self.debug(len(stack)*"|", "DEFI:", str(cursor.get_definition()))
+            self.debug(len(kind_stack)*"|", "DEFI:", str(cursor.get_definition()))
 
         if cursor.kind == ci.CursorKind.BINARY_OPERATOR:
-            self.debug(len(stack)*"|", "EXTE:", str(cursor.extent))
+            self.debug(len(kind_stack)*"|", "EXTE:", str(cursor.extent))
             ci.TokenGroup.get_tokens(cursor.translation_unit, cursor.extent)
 
-        stack.append(cursor.kind)
+        kind_stack.append(cursor.kind)
+        cursor_stack.append(cursor)
         for child in cursor.get_children():
             local_vars = self.get_variables(child,
                                             local_vars,
                                             conditions,
                                             weightings,
-                                            stack)
-        stack.pop()
+                                            kind_stack,
+                                            cursor_stack)
+        cursor_stack.pop()
+        kind_stack.pop()
 
         return local_vars
 
