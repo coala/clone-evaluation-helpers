@@ -17,10 +17,19 @@ def is_call_argument(cursor, stack):
     return False
 
 
+def is_returned(cursor, stack):
+    for elem in stack:
+        if elem.kind == ci.CursorKind.RETURN_STMT:
+            return True
+
+    return False
+
+
 class ClangASTBear(LocalBear):
     def run(self, filename, file, *args):
         cc = ClangCountVectorCreator(conditions=[no_condition,
-                                                 is_call_argument])
+                                                 is_call_argument,
+                                                 is_returned])
         count_dict = cc.get_vectors_for_file(filename)
         return [Result(self.__class__.__name__,
                        "COUNT DICT IS: " + str(count_dict),

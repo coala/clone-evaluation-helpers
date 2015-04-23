@@ -13,4 +13,6 @@ int main(int t, char* args) {
     for(int i; i < 5; i++) {
         printf("i is %d", i);
     }
+
+    return t;
 }
