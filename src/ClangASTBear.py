@@ -10,7 +10,7 @@ def no_condition(cursor, stack):
 
 
 def is_call_argument(cursor, stack):
-    for elem in stack:
+    for elem, child_num in stack:
         if elem.kind == ci.CursorKind.CALL_EXPR:
             return True
 
@@ -18,7 +18,7 @@ def is_call_argument(cursor, stack):
 
 
 def is_returned(cursor, stack):
-    for elem in stack:
+    for elem, child_num in stack:
         if elem.kind == ci.CursorKind.RETURN_STMT:
             return True
 
