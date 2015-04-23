@@ -3,15 +3,15 @@
 
 int test(void);
 
-int g;
+int glob;
 
 int main(int t, char* args) {
-    smile(t, g);
-    t = g;
+    smile(t, glob);
+    t = glob;
 
-    if (t == g) {
+    if (t == glob) {
         int *asd;
-        t = args[g];
+        t = args[glob];
     }
 
     for(int i; i < 5; i++) {

@@ -25,11 +25,43 @@ def is_returned(cursor, stack):
     return False
 
 
+def is_condition(cursor, stack):
+    last_if_present = False
+    for elem, child_num in stack:
+        # The first child of an IF_STMT is the condition.
+        if last_if_present and child_num == 0:
+            return True
+
+        if elem.kind == ci.CursorKind.IF_STMT:
+            last_if_present = True
+        else:
+            last_if_present = False
+
+    return False
+
+
+def is_in_condition(cursor, stack):
+    last_if_present = False
+    for elem, child_num in stack:
+        # The second child of an if is its body, the third is the else branch
+        if last_if_present and child_num in [1, 2]:
+            return True
+
+        if elem.kind == ci.CursorKind.IF_STMT:
+            last_if_present = True
+        else:
+            last_if_present = False
+
+    return False
+
+
 class ClangASTBear(LocalBear):
     def run(self, filename, file, *args):
         cc = ClangCountVectorCreator(conditions=[no_condition,
                                                  is_call_argument,
-                                                 is_returned])
+                                                 is_returned,
+                                                 is_condition,
+                                                 is_in_condition])
         count_dict = cc.get_vectors_for_file(filename)
         return [Result(self.__class__.__name__,
                        "COUNT DICT IS: " + str(count_dict),
