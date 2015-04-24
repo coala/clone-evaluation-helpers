@@ -3,6 +3,7 @@ from bears.codeclone_detection.ClangCountVectorCreator import \
     ClangCountVectorCreator
 from coalib.bearlib.parsing.clang import cindex as ci
 from coalib.results.Result import Result
+from coalib.settings.Setting import Setting
 
 
 def no_condition(cursor, stack):
@@ -66,13 +67,42 @@ def is_in_condition(cursor, stack):
     return is_nth_child_of_kind(stack, [1, 2], ci.CursorKind.IF_STMT)
 
 
+condition_dict = {"use": no_condition,
+                  "in_if": is_in_condition,
+                  "is_condition": is_condition,
+                  "is_returned": is_returned,
+                  "is_call_arg": is_call_argument}
+
+
+def cv_condition(value):
+    """
+    This is a custom converter to convert a setting from coala into counting
+    condition function objects for this bear only. It may be extended later if
+    other backends than clang get supported.
+
+    :param value: A Setting
+    :return:      A list of functions (counting conditions)
+    """
+    assert isinstance(value, Setting)
+
+    str_list = list(value)
+    result_list = []
+    for elem in str_list:
+        result_list.append(condition_dict.get(elem.lower()))
+
+    return result_list
+
+
 class ClangASTBear(LocalBear):
-    def run(self, filename, file, *args):
-        cc = ClangCountVectorCreator(conditions=[no_condition,
-                                                 is_call_argument,
-                                                 is_returned,
-                                                 is_condition,
-                                                 is_in_condition])
+    def run(self,
+            filename,
+            file,
+            condition_list: cv_condition=[no_condition,
+                                          is_call_argument,
+                                          is_returned,
+                                          is_condition,
+                                          is_in_condition]):
+        cc = ClangCountVectorCreator(conditions=condition_list)
         count_dict = cc.get_vectors_for_file(filename)
         return [Result(self.__class__.__name__,
                        "COUNT DICT IS: " + str(count_dict),
