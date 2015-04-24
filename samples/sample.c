@@ -14,7 +14,8 @@ int main(int t, char* args) {
         t = args[glob];
     }
 
-    for(int i; i < 5; i++) {
+    int i;
+    for(; i < 5; i++) {
         printf("i is %d", i);
     }
 

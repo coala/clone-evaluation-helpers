@@ -92,7 +92,7 @@ def cv_condition(value):
     return result_list
 
 
-class ClangASTBear(LocalBear):
+class ClangCountVectorBear(LocalBear):
     def run(self,
             filename,
             file,
