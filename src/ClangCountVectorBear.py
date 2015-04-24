@@ -48,11 +48,16 @@ def is_nth_child_of_kind(stack, allowed_nums, kind):
     """
     is_kind_child = False
     for elem, child_num in stack:
+        assert isinstance(elem, ci.Cursor)
         if is_kind_child and child_num in allowed_nums:
             return True
 
         if elem.kind == kind:
             is_kind_child = True
+            print("IS WANTED KIND", kind)
+            for token in elem.get_tokens():
+                print("TK:", token.kind)
+                print("TS:", token.spelling)
         else:
             is_kind_child = False
 
