@@ -5,7 +5,10 @@ detection for coala. This code may make use off some code not yet merged into
 coala so make sure you use the up to date version of it and checkout the
 wip/sils/cc branch.
 
-See
+Note that this code is experimental. When it becomes clean it will be merged
+into the coala main repository, thus don't expect clean code here.
+
+For more info about the algorithm, see
 http://www.callowbird.com/uploads/8/6/6/4/8664563/cmcd_count_matrix_based_code_clone_detection.pdf
 
 # Usage
