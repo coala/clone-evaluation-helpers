@@ -77,8 +77,7 @@ condition_dict = {"use": no_condition,
 def cv_condition(value):
     """
     This is a custom converter to convert a setting from coala into counting
-    condition function objects for this bear only. It may be extended later if
-    other backends than clang get supported.
+    condition function objects for this bear only.
 
     :param value: A Setting
     :return:      A list of functions (counting conditions)
