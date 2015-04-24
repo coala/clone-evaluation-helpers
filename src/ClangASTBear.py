@@ -25,34 +25,34 @@ def is_returned(cursor, stack):
     return False
 
 
-def is_condition(cursor, stack):
-    last_if_present = False
+def is_nth_child_of_kind(stack, allowed_nums, kind):
+    """
+    Checks if the stack contains a cursor with is of the given kind and the
+    stack also has a child of this element which number is in the allowed_nums
+    list.
+
+    :return: True if the described situation matches.
+    """
+    is_kind_child = False
     for elem, child_num in stack:
         # The first child of an IF_STMT is the condition.
-        if last_if_present and child_num == 0:
+        if is_kind_child and child_num in allowed_nums:
             return True
 
-        if elem.kind == ci.CursorKind.IF_STMT:
-            last_if_present = True
+        if elem.kind == kind:
+            is_kind_child = True
         else:
-            last_if_present = False
+            is_kind_child = False
 
     return False
+
+
+def is_condition(cursor, stack):
+    return is_nth_child_of_kind(stack, [0], ci.CursorKind.IF_STMT)
 
 
 def is_in_condition(cursor, stack):
-    last_if_present = False
-    for elem, child_num in stack:
-        # The second child of an if is its body, the third is the else branch
-        if last_if_present and child_num in [1, 2]:
-            return True
-
-        if elem.kind == ci.CursorKind.IF_STMT:
-            last_if_present = True
-        else:
-            last_if_present = False
-
-    return False
+    return is_nth_child_of_kind(stack, [1, 2], ci.CursorKind.IF_STMT)
 
 
 class ClangASTBear(LocalBear):
