@@ -17,12 +17,25 @@ Download and use coala on this project:
 
 ```
 git clone https://github.com/coala-analyzer/coala
-git checkout wip/sils/cc
 cd coala
+git checkout wip/sils/cc
 sudo python3 setup.py install
 cd ..
 git clone https://github.com/coala-analyzer/clang-ast-bear
 cd clang-ast-bear
+coala
+```
+
+Updating everything:
+
+```
+cd coala
+git fetch
+git reset --hard origin/wip/sils/cc
+sudo python3 setup.py install
+cd ..
+cd clang-ast-bear
+git pull
 coala
 ```
 
