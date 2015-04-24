@@ -31,11 +31,14 @@ def is_nth_child_of_kind(stack, allowed_nums, kind):
     stack also has a child of this element which number is in the allowed_nums
     list.
 
-    :return: True if the described situation matches.
+    :param stack:        The stack holding a tuple holding the parent cursors
+                         and the child number.
+    :param allowed_nums: List of child numbers allowed.
+    :param kind:         The kind of the parent element.
+    :return:             True if the described situation matches.
     """
     is_kind_child = False
     for elem, child_num in stack:
-        # The first child of an IF_STMT is the condition.
         if is_kind_child and child_num in allowed_nums:
             return True
 
