@@ -9,20 +9,28 @@ def no_condition(cursor, stack):
     return True
 
 
-def is_call_argument(cursor, stack):
+def stack_contains_kind(stack, kind):
+    """
+    Checks if a cursor with the given kind is within the stack.
+
+    :param stack: The stack holding a tuple holding the parent cursors and the
+                  child number.
+    :param kind:  The kind of the cursor to search for.
+    :return:      True if the kind was found.
+    """
     for elem, child_num in stack:
-        if elem.kind == ci.CursorKind.CALL_EXPR:
+        if elem.kind == kind:
             return True
 
     return False
+
+
+def is_call_argument(cursor, stack):
+    return stack_contains_kind(stack, ci.CursorKind.CALL_EXPR)
 
 
 def is_returned(cursor, stack):
-    for elem, child_num in stack:
-        if elem.kind == ci.CursorKind.RETURN_STMT:
-            return True
-
-    return False
+    return stack_contains_kind(stack, ci.CursorKind.RETURN_STMT)
 
 
 def is_nth_child_of_kind(stack, allowed_nums, kind):
