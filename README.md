@@ -59,6 +59,7 @@ coala
 ## TODO until April 26:
 
  * Introduce more Counting Conditions
+ * Use get_semantic_parent instead of stack
 
 ## TODO until May 10:
 
