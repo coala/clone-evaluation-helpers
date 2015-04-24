@@ -41,7 +41,7 @@ def is_nth_child_of_kind(stack, allowed_nums, kind):
 
     :param stack:        The stack holding a tuple holding the parent cursors
                          and the child number.
-    :param allowed_nums: List of child numbers allowed.
+    :param allowed_nums: List/iterator of child numbers allowed.
     :param kind:         The kind of the parent element.
     :return:             True if the described situation matches.
     """
