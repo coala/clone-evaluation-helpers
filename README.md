@@ -37,10 +37,12 @@ coala
    * Counts under different conditions
  * Cleanup
  * Write unittests
+ * Introduce Counting Conditions (dynamically, via function objects)
+ * Let Counting Conditions be configured via coala
 
 ## TODO until April 26:
 
- * Introduce Counting Conditions (dynamically, via function objects)
+ * Introduce more Counting Conditions
 
 ## TODO until May 10:
 

@@ -96,11 +96,14 @@ class ClangASTBear(LocalBear):
     def run(self,
             filename,
             file,
-            condition_list: cv_condition=[no_condition,
-                                          is_call_argument,
-                                          is_returned,
-                                          is_condition,
-                                          is_in_condition]):
+            condition_list: cv_condition):
+        """
+        Creates a count vector for each function in the given file(s).
+
+        :param condition_list: A list of counting conditions. Possible values
+                               are in_if, use, is_condition, is_returned,
+                               is_call_arg.
+        """
         cc = ClangCountVectorCreator(conditions=condition_list)
         count_dict = cc.get_vectors_for_file(filename)
         return [Result(self.__class__.__name__,
