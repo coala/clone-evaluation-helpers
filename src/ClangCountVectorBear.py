@@ -75,12 +75,31 @@ def is_in_condition(cursor, stack):
     return is_nth_child_of_kind(stack, [1, 2], ci.CursorKind.IF_STMT)
 
 
+arith_binary_operators = ['+', '-', '*', '/', '&', '|']
+comparision_operators = ["==", "<=", ">=", "<", ">", "!="]
+assignment_operators = ["="]
+for op in arith_binary_operators:
+    assignment_operators.append(op + "=")
+
+
 def is_in_comparision(cursor, stack):
-    ident = ClangCountVectorCreator.get_identifier_name(cursor)
     for elem, child_num in stack:
         if elem.kind == ci.CursorKind.BINARY_OPERATOR:
             for token in elem.get_tokens():
-                pass
+                if token.spelling.decode() in comparision_operators:
+                    return True
+
+    return False
+
+
+def is_in_assignment(cursor, stack):
+    for elem, child_num in stack:
+        if elem.kind == ci.CursorKind.BINARY_OPERATOR:
+            for token in elem.get_tokens():
+                if token.spelling.decode() in assignment_operators:
+                    return True
+
+    return False
 
 
 condition_dict = {"use": no_condition,
@@ -88,7 +107,8 @@ condition_dict = {"use": no_condition,
                   "is_condition": is_condition,
                   "is_returned": is_returned,
                   "is_call_arg": is_call_argument,
-                  "in_comparision": is_in_comparision}
+                  "in_comparision": is_in_comparision,
+                  "in_assignment": is_in_assignment}
 
 
 def cv_condition(value):
