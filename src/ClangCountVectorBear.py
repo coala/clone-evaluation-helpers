@@ -77,9 +77,8 @@ def is_in_condition(cursor, stack):
 
 arith_binary_operators = ['+', '-', '*', '/', '&', '|']
 comparision_operators = ["==", "<=", ">=", "<", ">", "!="]
-assignment_operators = ["="]
-for op in arith_binary_operators:
-    assignment_operators.append(op + "=")
+adv_assignment_operators = [op + "=" for op in arith_binary_operators]
+assignment_operators = ["="] + adv_assignment_operators
 
 
 def is_in_comparision(cursor, stack):
@@ -102,7 +101,7 @@ def is_in_assignment(cursor, stack):
     return False
 
 
-def is_assigned(cursor, stack):
+def is_assignee(cursor, stack):
     cursor_end_pos = cursor.extent.end.line, cursor.extent.end.column
     for elem, child_num in stack:
         if elem.kind == ci.CursorKind.BINARY_OPERATOR:
@@ -118,6 +117,25 @@ def is_assigned(cursor, stack):
     return False
 
 
+def used_for_assignment(cursor, stack):
+    cursor_beg_pos = cursor.extent.start.line, cursor.extent.start.column
+    for elem, child_num in stack:
+        if elem.kind == ci.CursorKind.BINARY_OPERATOR:
+            for token in elem.get_tokens():
+                token_end_pos = (token.extent.end.line,
+                                   token.extent.end.column)
+                # This needs to be an assignment and cursor has to be on LHS
+                # or if we have something like += its irrelevant on which side
+                # it is because += reads on both sides
+                if (
+                        token.spelling.decode() in assignment_operators and (
+                            token_end_pos <= cursor_beg_pos or
+                            token.spelling.decode != "=")):
+                    return True
+
+    return False
+
+
 condition_dict = {"use": no_condition,
                   "in_if": is_in_condition,
                   "is_condition": is_condition,
@@ -125,7 +143,8 @@ condition_dict = {"use": no_condition,
                   "is_call_arg": is_call_argument,
                   "in_comparision": is_in_comparision,
                   "in_assignment": is_in_assignment,
-                  "is_assigned": is_assigned}
+                  "is_assignee": is_assignee,
+                  "used_for_assignment": used_for_assignment}
 
 
 def cv_condition(value):
@@ -157,7 +176,7 @@ class ClangCountVectorBear(LocalBear):
         :param condition_list: A list of counting conditions. Possible values
                                are in_if, use, is_condition, is_returned,
                                is_call_arg, in_comparision, in_assignment,
-                               is_assigned.
+                               is_assignee, used_for_assignment.
         """
         cc = ClangCountVectorCreator(conditions=condition_list)
         count_dict = cc.get_vectors_for_file(filename)
