@@ -7,7 +7,7 @@ int glob;
 
 int main(int t, char* args) {
     smile(t, glob);
-    t = glob;
+    t = args = glob;
 
     // TODO: Test short if: expr ? cond : elseexpr
     if (t == glob) {

@@ -102,13 +102,30 @@ def is_in_assignment(cursor, stack):
     return False
 
 
+def is_assigned(cursor, stack):
+    cursor_end_pos = cursor.extent.end.line, cursor.extent.end.column
+    for elem, child_num in stack:
+        if elem.kind == ci.CursorKind.BINARY_OPERATOR:
+            for token in elem.get_tokens():
+                token_begin_pos = (token.extent.start.line,
+                                   token.extent.start.column)
+                # This needs to be an assignment and cursor has to be on LHS
+                if (
+                        token.spelling.decode() in assignment_operators and
+                        cursor_end_pos <= token_begin_pos):
+                    return True
+
+    return False
+
+
 condition_dict = {"use": no_condition,
                   "in_if": is_in_condition,
                   "is_condition": is_condition,
                   "is_returned": is_returned,
                   "is_call_arg": is_call_argument,
                   "in_comparision": is_in_comparision,
-                  "in_assignment": is_in_assignment}
+                  "in_assignment": is_in_assignment,
+                  "is_assigned": is_assigned}
 
 
 def cv_condition(value):
@@ -139,7 +156,8 @@ class ClangCountVectorBear(LocalBear):
 
         :param condition_list: A list of counting conditions. Possible values
                                are in_if, use, is_condition, is_returned,
-                               is_call_arg, in_comparision, in_assignment.
+                               is_call_arg, in_comparision, in_assignment,
+                               is_assigned.
         """
         cc = ClangCountVectorCreator(conditions=condition_list)
         count_dict = cc.get_vectors_for_file(filename)
