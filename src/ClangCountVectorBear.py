@@ -139,7 +139,7 @@ class ClangCountVectorBear(LocalBear):
 
         :param condition_list: A list of counting conditions. Possible values
                                are in_if, use, is_condition, is_returned,
-                               is_call_arg.
+                               is_call_arg, in_comparision, in_assignment.
         """
         cc = ClangCountVectorCreator(conditions=condition_list)
         count_dict = cc.get_vectors_for_file(filename)
