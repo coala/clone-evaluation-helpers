@@ -118,6 +118,7 @@ def is_assignee(cursor, stack):
 
 
 def used_for_assignment(cursor, stack):
+    # TODO count unary ops like ++/--
     cursor_beg_pos = cursor.extent.start.line, cursor.extent.start.column
     for elem, child_num in stack:
         if elem.kind == ci.CursorKind.BINARY_OPERATOR:
@@ -136,6 +137,56 @@ def used_for_assignment(cursor, stack):
     return False
 
 
+def get_position_in_for_loop(cursor, stack):
+    # Yes, this is a very very dirty state machine
+    count_position = True
+    position = 0
+    brackets = 0
+    cursor_end_pos = cursor.extent.end.line, cursor.extent.end.column
+    for elem, child_num in stack:
+        if elem.kind == ci.CursorKind.FOR_STMT:
+            for token in elem.get_tokens():
+                token_begin_pos = (token.extent.start.line,
+                                   token.extent.start.column)
+                if count_position:
+                    if token.spelling.decode() == ";":
+                        if cursor_end_pos <= token_begin_pos:
+                            return position
+
+                        position += 1
+                        if position > 1:
+                            count_position = False
+                else:
+                    if token.spelling.decode() == "(":
+                        brackets += 1
+                    elif token.spelling.decode() == ")":
+                        if brackets == 0:
+                            if cursor_end_pos <= token_begin_pos:
+                                return position
+                            else:
+                                return position + 1
+                        else:
+                            brackets -= 1
+
+    return None
+
+
+def is_for_declaration(cursor, stack):
+    return get_position_in_for_loop(cursor, stack) is 0
+
+
+def is_for_condition(cursor, stack):
+    return get_position_in_for_loop(cursor, stack) is 1
+
+
+def is_for_incrementor(cursor, stack):
+    return get_position_in_for_loop(cursor, stack) is 2
+
+
+def is_for_content(cursor, stack):
+    return get_position_in_for_loop(cursor, stack) is 3
+
+
 condition_dict = {"use": no_condition,
                   "in_if": is_in_condition,
                   "is_condition": is_condition,
@@ -144,7 +195,11 @@ condition_dict = {"use": no_condition,
                   "in_comparision": is_in_comparision,
                   "in_assignment": is_in_assignment,
                   "is_assignee": is_assignee,
-                  "used_for_assignment": used_for_assignment}
+                  "used_for_assignment": used_for_assignment,
+                  "is_for_declaration": is_for_declaration,
+                  "is_for_condition": is_for_condition,
+                  "is_for_incrementor": is_for_incrementor,
+                  "is_for_content": is_for_content}
 
 
 def cv_condition(value):
@@ -176,7 +231,9 @@ class ClangCountVectorBear(LocalBear):
         :param condition_list: A list of counting conditions. Possible values
                                are in_if, use, is_condition, is_returned,
                                is_call_arg, in_comparision, in_assignment,
-                               is_assignee, used_for_assignment.
+                               is_assignee, used_for_assignment,
+                               is_for_declaration, is_for_condition,
+                               is_for_incrementor, is_for_content.
         """
         cc = ClangCountVectorCreator(conditions=condition_list)
         count_dict = cc.get_vectors_for_file(filename)
