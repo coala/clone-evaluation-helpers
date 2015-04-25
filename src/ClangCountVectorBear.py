@@ -64,10 +64,14 @@ def is_nth_child_of_kind(stack, allowed_nums, kind):
 
 
 def is_condition(cursor, stack):
+    # In every case the first child of IF_STMT is the condition itself
+    # (non-NULL)
     return is_nth_child_of_kind(stack, [0], ci.CursorKind.IF_STMT)
 
 
 def is_in_condition(cursor, stack):
+    # In every case the first child of IF_STMT is the condition itself
+    # (non-NULL) so the second and third child are in the then/else branch
     return is_nth_child_of_kind(stack, [1, 2], ci.CursorKind.IF_STMT)
 
 
