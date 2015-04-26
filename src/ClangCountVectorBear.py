@@ -54,9 +54,6 @@ def is_nth_child_of_kind(stack, allowed_nums, kind):
 
         if elem.kind == kind:
             is_kind_child = True
-            print("IS WANTED KIND", kind)
-            for token in elem.get_tokens():
-                print("TK:", token.kind, ":", token.spelling.decode())
         else:
             is_kind_child = False
 
