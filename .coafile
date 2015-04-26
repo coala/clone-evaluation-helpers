@@ -1,3 +1,7 @@
 files = ./samples/*.c
 bear_dirs = ./src/**
 bears = ClangCountVectorBear
+
+[PRINT]
+enabled = false
+bears = ClangASTPrintBear
