@@ -4,6 +4,20 @@ from coalib.bearlib.parsing.clang.cindex import Index
 
 class ClangASTPrintBear(LocalBear):
     def print_node(self, cursor, before="", spec_before=""):
+        """
+        Prints this node and all child nodes recursively in the style of:
+
+        -node
+        |-child
+        `-another child
+         |-child of child
+         `-last child of child
+
+        :param cursor:      The node to print. (Clang cursor.)
+        :param before:      What to print before the node.
+        :param spec_before: What to print before this node but to replace with
+                            spaces for child nodes.
+        """
         print(before + spec_before + "-" + str(cursor.kind))
 
         children = list(cursor.get_children())
