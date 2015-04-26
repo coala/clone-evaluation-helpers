@@ -3,19 +3,16 @@ from coalib.bearlib.parsing.clang.cindex import Index
 
 
 class ClangASTPrintBear(LocalBear):
-    def print_node(self, cursor, pre=""):
-        print(pre + "-", str(cursor.kind))
-
-        if pre[-1:] == "`":
-            pre = pre[:-1] + " "
+    def print_node(self, cursor, before="", spec_before=""):
+        print(before + spec_before + "-" + str(cursor.kind))
 
         children = list(cursor.get_children())
 
         if len(children) > 0:
             for child in children[:-1]:
-                self.print_node(child, pre + "|")
+                self.print_node(child, before + len(spec_before)*" " + "|")
 
-            self.print_node(children[-1], pre + "`")
+            self.print_node(children[-1], before + len(spec_before)*" ", "`")
 
     def run(self,
             filename,
