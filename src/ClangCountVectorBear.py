@@ -60,6 +60,16 @@ def is_nth_child_of_kind(stack, allowed_nums, kind):
     return False
 
 
+def is_while_condition(cursor, stack):
+    # TODO: Doesn't work yet reliable
+    return is_nth_child_of_kind(stack, [0], ci.CursorKind.WHILE_STMT)
+
+
+def in_while_loop(cursor, stack):
+    # TODO: Doesn't work yet
+    return is_nth_child_of_kind(stack, [1], ci.CursorKind.WHILE_STMT)
+
+
 def is_condition(cursor, stack):
     # In every case the first child of IF_STMT is the condition itself
     # (non-NULL)
@@ -196,7 +206,9 @@ condition_dict = {"use": no_condition,
                   "is_for_declaration": is_for_declaration,
                   "is_for_condition": is_for_condition,
                   "is_for_incrementor": is_for_incrementor,
-                  "is_for_content": is_for_content}
+                  "is_for_content": is_for_content,
+                  "is_while_condition": is_while_condition,
+                  "in_while_loop": in_while_loop}
 
 
 def cv_condition(value):
@@ -230,7 +242,8 @@ class ClangCountVectorBear(LocalBear):
                                is_call_arg, in_comparision, in_assignment,
                                is_assignee, used_for_assignment,
                                is_for_declaration, is_for_condition,
-                               is_for_incrementor, is_for_content.
+                               is_for_incrementor, is_for_content,
+                               is_while_condition, in_while_loop.
         """
         cc = ClangCountVectorCreator(conditions=condition_list)
         count_dict = cc.get_vectors_for_file(filename)

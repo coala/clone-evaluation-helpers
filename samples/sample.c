@@ -15,6 +15,10 @@ int main(int t, char* args) {
         t = args[glob];
     }
 
+    while (t) {
+        printf("test %d", i);
+    }
+
     int i;
     for(; i < 5; i++) {
         printf("i is %d", i);
