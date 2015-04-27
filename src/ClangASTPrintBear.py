@@ -18,7 +18,10 @@ class ClangASTPrintBear(LocalBear):
         :param spec_before: What to print before this node but to replace with
                             spaces for child nodes.
         """
-        print(before + spec_before + "-" + str(cursor.kind))
+        print(before + spec_before + "-",
+              str(cursor.displayname.decode()),
+              str(cursor.kind),
+              str(cursor.location.line))
 
         children = list(cursor.get_children())
 
