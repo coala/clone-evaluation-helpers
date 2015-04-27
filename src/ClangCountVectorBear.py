@@ -61,12 +61,10 @@ def is_nth_child_of_kind(stack, allowed_nums, kind):
 
 
 def is_while_condition(cursor, stack):
-    # TODO: Doesn't work yet reliable
     return is_nth_child_of_kind(stack, [0], ci.CursorKind.WHILE_STMT)
 
 
 def in_while_loop(cursor, stack):
-    # TODO: Doesn't work yet
     return is_nth_child_of_kind(stack, [1], ci.CursorKind.WHILE_STMT)
 
 
