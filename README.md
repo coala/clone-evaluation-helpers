@@ -39,6 +39,12 @@ git pull
 coala
 ```
 
+Printing the AST:
+
+```
+coala print
+```
+
 # Status
 
 ## Done:
