@@ -61,12 +61,10 @@ coala print
  * Write unittests
  * Introduce Counting Conditions (dynamically, via function objects)
  * Let Counting Conditions be configured via coala
-
-## TODO until April 26:
-
- * Introduce more Counting Conditions
- * Use get_semantic_parent instead of stack
+ * Implement function matching algorithm
 
 ## TODO until May 10:
 
+ * Introduce more Counting Conditions
+ * Use get_semantic_parent instead of stack
  * Undefined other tasks
