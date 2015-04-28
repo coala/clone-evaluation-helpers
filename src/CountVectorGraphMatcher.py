@@ -1,4 +1,5 @@
 from bears.codeclone_detection.CountVector import CountVector
+from math import sqrt
 from munkres import Munkres
 # Instantiate globally since this class is holding stateless public methods.
 munkres = Munkres()
@@ -16,10 +17,13 @@ def difference(cv1, cv2):
     assert isinstance(cv2, CountVector)
     assert len(cv1) == len(cv2)
 
+    # TODO put this into the count vector class
+    len1 = sqrt(sum(ce**2 for ce in cv1))
+    len2 = sqrt(sum(ce**2 for ce in cv2))
 
-
-
-    raise NotImplementedError
+    # Return distance normalized by the longer vector
+    return sqrt(sum((ce1 - ce2)**2 for ce1, ce2 in zip(cv1, cv2)))/max(len1,
+                                                                       len2)
 
 
 def compare_functions(cm1, cm2):
