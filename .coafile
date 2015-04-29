@@ -1,8 +1,8 @@
 files = ./samples/*.c
 bear_dirs = ./src/**
 bears = ClangCountVectorBear
+log_level = DEBUG
 
 [PRINT]
 enabled = false
-log_level = DEBUG
 bears = ClangASTPrintBear
