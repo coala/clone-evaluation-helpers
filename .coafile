@@ -4,4 +4,5 @@ bears = ClangCountVectorBear
 
 [PRINT]
 enabled = false
+log_level = DEBUG
 bears = ClangASTPrintBear
