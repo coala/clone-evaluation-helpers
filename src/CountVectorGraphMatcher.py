@@ -9,11 +9,13 @@ def compare_functions(cm1, cm2):
     """
     Compares the functions represented by the given count matrices.
 
-    :param cm1: Count matrix for the first function.
-    :param cm2: Count matrix for the second function.
+    :param cm1: Count vector dict for the first function.
+    :param cm2: Count vector dict for the second function.
     :return:    The difference between these functions, 0 is identical and 1
                 is not similar at all.
     """
+    assert isinstance(cm1, dict)
+    assert isinstance(cm2, dict)
     # The cost matrix holds the difference between the two variables i and j
     # in the i/j field. This is a representation of a bipartite weighted graph
     # with nodes representing the first function on the one side (rows) and the
@@ -21,8 +23,8 @@ def compare_functions(cm1, cm2):
     # fields in the matrix are the weighted nodes connecting each element from
     # one side to the other.
     cost_matrix = [[cv1.difference(cv2)
-                    for cv2 in cm2]
-                   for cv1 in cm1]
+                    for cv2 in cm2.values()]
+                   for cv1 in cm1.values()]
 
     # Pad manually, we'll access the zeros when iterating over matching, this
     # will thus make the matrix square and thus a legal input for munkres while

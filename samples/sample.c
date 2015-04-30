@@ -2,6 +2,10 @@
 #include "not_existant.c"
 
 int test(void);
+int another(void) {
+    int i;
+    return i;
+}
 
 int glob;
 

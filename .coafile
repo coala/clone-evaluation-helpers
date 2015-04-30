@@ -6,3 +6,7 @@ log_level = DEBUG
 [PRINT]
 enabled = false
 bears = ClangASTPrintBear
+
+[det]
+enabled = false
+bears = CloneDetectionBear
