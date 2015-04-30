@@ -75,9 +75,10 @@ class CloneDetectionBear(GlobalBear):
         self.warn("Count matrices are:", str(count_matrices))
 
         for function_1, function_2 in combinations(count_matrices, 2):
-            similarity = self.compare_functions(count_matrices[function_1],
-                                                count_matrices[function_2])
-            self.warn("Difference of {} and {} is {}".format(
-                function_1,
-                function_2,
-                similarity))
+            if "original" in function_1 or "original" in function_2:
+                similarity = self.compare_functions(count_matrices[function_1],
+                                                    count_matrices[function_2])
+                self.warn("Difference of {} and {} is {}".format(
+                    function_1[function_1.rfind("/")+1:function_1.find("|")],
+                    function_2[function_2.rfind("/")+1:function_2.find("|")],
+                    similarity))
