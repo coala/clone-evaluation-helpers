@@ -62,6 +62,7 @@ coala print
  * Introduce Counting Conditions (dynamically, via function objects)
  * Let Counting Conditions be configured via coala
  * Implement function matching algorithm
+ * Calculate difference/similarity for every two functions
 
 ## TODO until May 10:
 

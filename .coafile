@@ -1,9 +1,8 @@
+[DEFAULT]
 enabled = false
+log_level = DEBUG
 files = ./samples/*.c
 bear_dirs = ./src/**
-bears = ClangCountVectorBear
-log_level = DEBUG
-
 condition_list =
     used,
     returned,
@@ -13,11 +12,14 @@ condition_list =
     is_assigner,
     loop_content
 
+[COUNT]
+bears = ClangCountVectorBear
+
+
 [PRINT]
-enabled = false
 bears = ClangASTPrintBear
 
-[det]
-enabled = false
+[DETECT]
+enabled = true
 files = ./samples/roy*/*.c
 bears = CloneDetectionBear

@@ -72,13 +72,14 @@ class CloneDetectionBear(GlobalBear):
             condition_list: ClangCountingConditions.counting_condition,
             dependency_results=None):
         count_matrices = self.get_count_matrices(condition_list)
-        self.warn("Count matrices are:", str(count_matrices))
+        self.debug("Count matrices are:", str(count_matrices))
 
+        # Check each function with each other one (combinations of 2)
         for function_1, function_2 in combinations(count_matrices, 2):
             if "original" in function_1 or "original" in function_2:
                 similarity = self.compare_functions(count_matrices[function_1],
                                                     count_matrices[function_2])
                 self.warn("Difference of {} and {} is {}".format(
-                    function_1[function_1.rfind("/")+1:function_1.find("|")],
-                    function_2[function_2.rfind("/")+1:function_2.find("|")],
+                    function_1[function_1.rfind("/"):function_1.find("|")],
+                    function_2[function_2.rfind("/"):function_2.find("|")],
                     similarity))
