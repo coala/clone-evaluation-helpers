@@ -5,23 +5,6 @@ from munkres import Munkres
 munkres = Munkres()
 
 
-def difference(cv1, cv2):
-    """
-    Compares the variables represented by the given count vectors.
-
-    :param cv1: A CountVector object representing the first function.
-    :param cv2: A CountVector object representing the second function.
-    :return:    A difference value between 0 (identical) and 1 (not similar).
-    """
-    assert isinstance(cv1, CountVector)
-    assert isinstance(cv2, CountVector)
-    assert len(cv1) == len(cv2)
-
-    # Return distance normalized by the longer vector
-    return sqrt(sum((ce1 - ce2)**2
-                    for ce1, ce2 in zip(cv1, cv2)))/max(abs(cv1), abs(cv2))
-
-
 def compare_functions(cm1, cm2):
     """
     Compares the functions represented by the given count matrices.
@@ -37,7 +20,7 @@ def compare_functions(cm1, cm2):
     # nodes representing the second function on the other side (columns). The
     # fields in the matrix are the weighted nodes connecting each element from
     # one side to the other.
-    cost_matrix = [[difference(cv1, cv2)
+    cost_matrix = [[cv1.difference(cv2)
                     for cv2 in cm2]
                    for cv1 in cm1]
 
