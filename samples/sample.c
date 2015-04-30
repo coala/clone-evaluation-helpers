@@ -7,6 +7,11 @@ int another(void) {
     return i;
 }
 
+int quite_another(void) {
+    int g;
+    return g;
+}
+
 int glob;
 
 int main(int t, char* args) {
