@@ -21,5 +21,5 @@ bears = ClangASTPrintBear
 
 [DETECT]
 enabled = true
-files = ./samples/roy*/*.c
+files = ./samples/**/*.c
 bears = CloneDetectionBear

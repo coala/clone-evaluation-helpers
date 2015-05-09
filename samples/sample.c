@@ -14,11 +14,13 @@ int quite_another(void) {
 
 int glob;
 
+#define INC(a, b)  a = a + b
+
 int main(int t, char* args) {
     smile(t, glob);
     t = args = glob;
 
-    t += 1;
+    INC(t, 1);
 
     // TODO: Test short if: expr ? cond : elseexpr
     if (t == glob) {
@@ -35,4 +37,10 @@ int main(int t, char* args) {
     }
 
     return t;
+}
+
+int not_main(char g, int h) {
+    for(int j; j < g; h++) {
+
+    }
 }
