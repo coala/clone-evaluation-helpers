@@ -19,7 +19,12 @@ bears = ClangCountVectorBear
 [PRINT]
 bears = ClangASTPrintBear
 
-[DETECT]
+[NOT]
 enabled = true
 files = ./samples/tests/not_clones/*.c
+bears = CloneDetectionBear
+
+[CLONES]
+enabled = true
+files = ./samples/tests/clones/*.c
 bears = CloneDetectionBear

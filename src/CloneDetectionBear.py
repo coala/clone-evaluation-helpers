@@ -55,11 +55,9 @@ class CloneDetectionBear(GlobalBear):
                         for cv2 in cm2.values()]
                        for cv1 in cm1.values()]
 
-        # Pad manually, we'll access the zeros when iterating over matching,
-        # this will thus make the matrix square and thus a legal input for
-        # munkres while the zeros don't change the result. They are simply
-        # put dummy variables which don't influence the result.
-        cost_matrix = munkres.pad_matrix(cost_matrix)
+        # Pad manually with ones. If we have one variable in one function and
+        # no corresponding in the other this is 100% difference, so 1.
+        cost_matrix = munkres.pad_matrix(cost_matrix, pad_value=1)
 
         # The munkres algorithm will calculate a matching such that the sum of
         # the taken fields is minimal. It thus will associate each variable
@@ -67,7 +65,7 @@ class CloneDetectionBear(GlobalBear):
         matching = munkres.compute(cost_matrix)
 
         # Sum it up, normalize it so we have a value in [0, 1]
-        return sum(cost_matrix[x][y] for x, y in matching)/min(len(cm1),
+        return sum(cost_matrix[x][y] for x, y in matching)/max(len(cm1),
                                                                len(cm2))
 
     def run(self,
@@ -81,9 +79,12 @@ class CloneDetectionBear(GlobalBear):
         # Check each function with each other one (combinations of 2)
         for function_1, function_2 in combinations(count_matrices, 2):
             #if "original" in function_1 or "original" in function_2:
-            similarity = self.compare_functions(count_matrices[function_1],
+            difference = self.compare_functions(count_matrices[function_1],
                                                 count_matrices[function_2])
             self.warn("Difference of {} and {} is {}".format(
                 function_1[function_1.rfind("/"):],
                 function_2[function_2.rfind("/"):],
-                similarity))
+                difference))
+            if difference < 0.1:
+                self.debug("CM1:", str(count_matrices[function_1]))
+                self.debug("CM2:", str(count_matrices[function_2]))
