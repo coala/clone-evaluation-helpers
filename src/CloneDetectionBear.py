@@ -100,7 +100,7 @@ class CloneDetectionBear(GlobalBear):
                     function_2[function_2.rfind("/"):],
                     difference))
 
-        self.err("Got {} clones and {} non-clones. Ratio: {}%".format(
-            clones,
-            not_clones,
-            100*clones/not_clones))
+        self.err("There are {} clone combinations and {} non-clone "
+                 "combinations of {} functions.".format(clones,
+                                                        not_clones,
+                                                        len(count_matrices)))
