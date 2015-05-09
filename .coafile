@@ -18,6 +18,7 @@ bears = ClangCountVectorBear
 
 [PRINT]
 bears = ClangASTPrintBear
+files = ./samples/tests/not_clones/*.c
 
 [NOT]
 enabled = true

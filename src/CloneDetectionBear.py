@@ -89,6 +89,6 @@ class CloneDetectionBear(GlobalBear):
                 function_1[function_1.rfind("/"):],
                 function_2[function_2.rfind("/"):],
                 difference))
-            if difference < 0.1:
-                self.debug("CM1:", str(count_matrices[function_1]))
-                self.debug("CM2:", str(count_matrices[function_2]))
+            #if difference < 0.1:
+            #    self.debug("CM1:", str(count_matrices[function_1]))
+            #    self.debug("CM2:", str(count_matrices[function_2]))
