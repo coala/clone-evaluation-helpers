@@ -1,0 +1,13 @@
+[DEFAULT]
+log_level = DEBUG
+files = ../linux*/fs/configfs/**/*.c
+bear_dirs = ./src/**
+bears = CloneDetectionBear
+condition_list =
+    used,
+    returned,
+    is_condition,
+    in_condition,
+    is_assignee,
+    is_assigner,
+    loop_content
