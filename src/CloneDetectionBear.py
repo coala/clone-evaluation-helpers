@@ -82,13 +82,16 @@ class CloneDetectionBear(GlobalBear):
 
         # Check each function with each other one (combinations of 2)
         for function_1, function_2 in combinations(count_matrices, 2):
-            #if "original" in function_1 or "original" in function_2:
             difference = self.compare_functions(count_matrices[function_1],
                                                 count_matrices[function_2])
-            self.warn("Difference of {} and {} is {}".format(
-                function_1[function_1.rfind("/"):],
-                function_2[function_2.rfind("/"):],
-                difference))
-            #if difference < 0.1:
-            #    self.debug("CM1:", str(count_matrices[function_1]))
-            #    self.debug("CM2:", str(count_matrices[function_2]))
+            if difference < 0.2:
+                self.warn("Clone found! Difference of {} and {} is {}".format(
+                    function_1[function_1.rfind("/"):],
+                    function_2[function_2.rfind("/"):],
+                    difference))
+            else:
+                self.debug("{} and {} are identified as unique "
+                           "with difference {}.".format(
+                    function_1[function_1.rfind("/"):],
+                    function_2[function_2.rfind("/"):],
+                    difference))
