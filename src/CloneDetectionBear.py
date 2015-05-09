@@ -91,8 +91,10 @@ class CloneDetectionBear(GlobalBear):
             self.debug(" *", condition.__name__)
 
         count_matrices = self.get_count_matrices(condition_list)
+        function_duplications = {}
         self.debug("Found functions:")
         for key in count_matrices.keys():
+            function_duplications[key] = False
             self.debug(" *", key)
 
         clones = 0
@@ -111,6 +113,8 @@ class CloneDetectionBear(GlobalBear):
                           str(count_matrices[function_1]),
                           str(count_matrices[function_2]),
                           delimiter="\n")
+                function_duplications[function_1] = True
+                function_duplications[function_2] = True
             else:
                 not_clones += 1
                 self.debug("{} and {} are unique with difference {}.".format(
@@ -121,5 +125,8 @@ class CloneDetectionBear(GlobalBear):
         self.err("There are {} clone combinations and {} non-clone "
                  "combinations of {} functions (others excluded "
                  "heuristically).".format(clones,
-                                                        not_clones,
-                                                        len(count_matrices)))
+                                          not_clones,
+                                          len(count_matrices)))
+        self.err("{} functions are in duplication status, {} are not.".format(
+            list(function_duplications.values()).count(True),
+            list(function_duplications.values()).count(False)))

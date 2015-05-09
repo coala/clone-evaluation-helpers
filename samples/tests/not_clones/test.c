@@ -42,7 +42,7 @@ char *strcpy(char *restrict dest, const char *restrict src) {
 }
 
 int strlen(const char * s) {
-	size_t i;
+	int i;
 	for (i = 0; s[i] != '\0'; i++) ;
 	return i;
 }
