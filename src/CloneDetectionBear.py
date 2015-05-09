@@ -71,6 +71,11 @@ class CloneDetectionBear(GlobalBear):
     def run(self,
             condition_list: ClangCountingConditions.counting_condition,
             dependency_results=None):
+        self.debug("Running code clone detection with the following couting "
+                   "conditions:")
+        for condition in condition_list:
+            self.debug(" *", condition.__name__)
+
         count_matrices = self.get_count_matrices(condition_list)
         self.debug("Found functions:",
                    *[key for key in count_matrices.keys()],
