@@ -71,7 +71,7 @@ class CloneDetectionBear(GlobalBear):
     def run(self,
             condition_list: ClangCountingConditions.counting_condition,
             dependency_results=None):
-        self.debug("Using the following couting conditions:")
+        self.debug("Using the following counting conditions:")
         for condition in condition_list:
             self.debug(" *", condition.__name__)
 
