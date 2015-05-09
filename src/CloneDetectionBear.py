@@ -22,7 +22,9 @@ class CloneDetectionBear(GlobalBear):
         """
         result = {}
         cc = ClangCountVectorCreator(conditions=condition_list)
+
         for filename in self.file_dict:
+            self.debug("Creating count dict for file", filename)
             count_dict = cc.get_vectors_for_file(filename)
             for function in count_dict:
                 result[filename + "|" + function] = count_dict[function]
@@ -72,7 +74,7 @@ class CloneDetectionBear(GlobalBear):
             condition_list: ClangCountingConditions.counting_condition,
             dependency_results=None):
         count_matrices = self.get_count_matrices(condition_list)
-        self.debug("Count matrices are:",
+        self.debug("Found functions:",
                    *[key for key in count_matrices.keys()],
                    delimiter="\n")
 
