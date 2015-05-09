@@ -1,4 +1,5 @@
 from itertools import combinations
+from bears.codeclone_detection.CountVector import CountVector
 from munkres import Munkres
 # Instantiate globally since this class is holding stateless public methods.
 munkres = Munkres()
@@ -10,6 +11,16 @@ from bears.codeclone_detection import ClangCountingConditions
 
 
 class CloneDetectionBear(GlobalBear):
+    def exclude_function(self, count_matrix):
+        """
+        Determines heuristically wether or not it makes sense for clone
+        detection to take this function into account.
+
+        :param count_matrix: The count dict representing the function.
+        :return:             True if the function is useless for evaluation.
+        """
+        return all(sum(cv.count_vector) < 2 for cv in count_matrix.values())
+
     def get_count_matrices(self, condition_list):
         """
         Retrieves matrices holding count vectors for all variables for all
@@ -27,7 +38,11 @@ class CloneDetectionBear(GlobalBear):
             self.debug("Creating count dict for file", filename, "...")
             count_dict = cc.get_vectors_for_file(filename)
             for function in count_dict:
-                result[filename + "|" + function] = count_dict[function]
+                if not self.exclude_function(count_dict[function]):
+                    result[filename + "|" + function] = count_dict[function]
+                else:
+                    self.debug("Excluding function", function)
+
 
         return result
 
@@ -89,18 +104,22 @@ class CloneDetectionBear(GlobalBear):
             if difference < 0.2:
                 clones += 1
                 self.warn("Clone found! Difference of {} and {} is {}".format(
-                    function_1[function_1.rfind("/"):],
-                    function_2[function_2.rfind("/"):],
+                    function_1[function_1.rfind("/")+1:function_1.rfind("(")],
+                    function_2[function_2.rfind("/")+1:function_2.rfind("(")],
                     difference))
+                self.warn("MATRICES:",
+                          str(count_matrices[function_1]),
+                          str(count_matrices[function_2]),
+                          delimiter="\n")
             else:
                 not_clones += 1
-                self.debug("{} and {} are identified as unique "
-                           "with difference {}.".format(
-                    function_1[function_1.rfind("/"):],
-                    function_2[function_2.rfind("/"):],
+                self.debug("{} and {} are unique with difference {}.".format(
+                    function_1[function_1.rfind("/")+1:function_1.rfind("(")],
+                    function_2[function_2.rfind("/")+1:function_2.rfind("(")],
                     difference))
 
         self.err("There are {} clone combinations and {} non-clone "
-                 "combinations of {} functions.".format(clones,
+                 "combinations of {} functions (others excluded "
+                 "heuristically).".format(clones,
                                                         not_clones,
                                                         len(count_matrices)))
