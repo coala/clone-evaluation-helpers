@@ -32,7 +32,9 @@ class CloneDetectionBear(GlobalBear):
                          content.
         """
         result = {}
-        cc = ClangCountVectorCreator(conditions=condition_list)
+        cc = ClangCountVectorCreator(
+            conditions=condition_list,
+            weightings=[0.5] + [1 for i in range(len(condition_list)-1)])
 
         for filename in self.file_dict:
             self.debug("Creating count dict for file", filename, "...")
