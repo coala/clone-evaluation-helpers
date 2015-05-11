@@ -1,7 +1,7 @@
 [DEFAULT]
 log_level = DEBUG
-files = ../linux*/fs/configfs/**/*.c
-bear_dirs = ./src/**
+files = ../linux*/fs/configfs/*.c
+bear_dirs = ./src/
 bears = CloneDetectionBear
 condition_list =
     used,
@@ -11,3 +11,6 @@ condition_list =
     is_assignee,
     is_assigner,
     loop_content
+
+[FS]
+files = ../linux*/fs/**/*.c
