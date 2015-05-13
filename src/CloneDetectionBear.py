@@ -10,6 +10,13 @@ from bears.codeclone_detection.ClangCountVectorCreator import \
 from bears.codeclone_detection import ClangCountingConditions
 
 
+def int_list(setting):
+    if setting is None:
+        return None
+
+    return [int(elem) for elem in setting]
+
+
 class CloneDetectionBear(GlobalBear):
     def exclude_function(self, count_matrix):
         """
@@ -24,20 +31,22 @@ class CloneDetectionBear(GlobalBear):
         """
         return all(sum(cv.count_vector) < 2 for cv in count_matrix.values())
 
-    def get_count_matrices(self, condition_list):
+    def get_count_matrices(self, condition_list, weightings):
         """
         Retrieves matrices holding count vectors for all variables for all
         functions in the given file.
 
-        :param filename: The filename of the file to examine.
-        :return:         A dict holding keys like "file|function" and a dict of
-                         count vector objects with variable names as key as
-                         content.
+        :param condition_list: List of counting conditions to use.
+        :param weightings:     List of weighting factors to use for the
+                               counting conditions.
+        :return:               A dict holding keys like "file|function" and a
+                               dict of count vector objects with variable
+                               names as key as content.
         """
         result = {}
         cc = ClangCountVectorCreator(
             conditions=condition_list,
-            weightings=[0.5] + [1 for i in range(len(condition_list)-1)])
+            weightings=weightings)
 
         for filename in self.file_dict:
             self.debug("Creating count dict for file", filename, "...")
@@ -90,12 +99,12 @@ class CloneDetectionBear(GlobalBear):
 
     def run(self,
             condition_list: ClangCountingConditions.counting_condition,
-            dependency_results=None):
+            weightings: int_list=None):
         self.debug("Using the following counting conditions:")
         for condition in condition_list:
             self.debug(" *", condition.__name__)
 
-        count_matrices = self.get_count_matrices(condition_list)
+        count_matrices = self.get_count_matrices(condition_list, weightings)
         function_duplications = {}
         self.debug("Found functions:")
         for key in count_matrices.keys():
