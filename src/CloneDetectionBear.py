@@ -16,6 +16,9 @@ class CloneDetectionBear(GlobalBear):
         Determines heuristically wether or not it makes sense for clone
         detection to take this function into account.
 
+        Applied heuristics:
+         * Functions with no used variables are ignored.
+
         :param count_matrix: The count dict representing the function.
         :return:             True if the function is useless for evaluation.
         """
