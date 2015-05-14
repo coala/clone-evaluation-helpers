@@ -94,12 +94,13 @@ class CloneDetectionBear(GlobalBear):
 
     def run(self,
             condition_list: ClangCountingConditions.counting_condition,
-            weightings: typed_list(int)=None):
+            condition_weightings: typed_list(float)=None):
         self.debug("Using the following counting conditions:")
         for condition in condition_list:
             self.debug(" *", condition.__name__)
 
-        count_matrices = self.get_count_matrices(condition_list, weightings)
+        count_matrices = self.get_count_matrices(condition_list,
+                                                 condition_weightings)
         function_duplications = {}
         self.debug("Found functions:")
         for key in count_matrices.keys():

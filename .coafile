@@ -11,6 +11,14 @@ condition_list =
     is_assignee,
     is_assigner,
     loop_content
+condition_weightings =
+    0.5,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
 
 [COUNT]
 bears = ClangCountVectorBear
