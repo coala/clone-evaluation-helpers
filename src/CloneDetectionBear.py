@@ -65,11 +65,11 @@ class CloneDetectionBear(GlobalBear):
                       "{file}, line {line}, function {function}. The "
                       "similarity is {similarity}.").format(
                         file=function_2[0],
-                        line=function_2[1][0],
-                        function=function_2[1][1],
+                        line=function_2[1],
+                        function=function_2[2],
                         similarity=1-difference),
                     file=function_1[0],
                     severity=RESULT_SEVERITY.MAJOR,
-                    line_nr=function_1[1][0]))
+                    line_nr=function_1[1]))
 
         return results
