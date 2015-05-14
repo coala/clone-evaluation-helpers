@@ -1,28 +1,8 @@
 [DEFAULT]
 enabled = false
 log_level = DEBUG
-files = ./samples/*.c
 bear_dirs = ./src/**
-condition_list =
-    used,
-    returned,
-    is_condition,
-    in_condition,
-    is_assignee,
-    is_assigner,
-    loop_content
-condition_weightings =
-    0.5,
-    1,
-    1,
-    1,
-    1,
-    1,
-    1
-
-[COUNT]
-bears = ClangCountVectorBear
-
+condition_list = used: 0.5, returned, is_condition, in_condition, is_assignee, is_assigner, loop_content
 
 [PRINT]
 bears = ClangASTPrintBear
