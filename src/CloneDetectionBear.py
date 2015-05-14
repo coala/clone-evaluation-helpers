@@ -15,11 +15,12 @@ from coalib.settings.Setting import typed_list
 class CloneDetectionBear(GlobalBear):
     def exclude_function(self, count_matrix):
         """
-        Determines heuristically wether or not it makes sense for clone
+        Determines heuristically whether or not it makes sense for clone
         detection to take this function into account.
 
         Applied heuristics:
-         * Functions with no used variables are ignored.
+         * Functions with only count vectors with a sum of all elements of 1
+           or 0 are very likely only declarations or empty and to be ignored.
 
         :param count_matrix: The count dict representing the function.
         :return:             True if the function is useless for evaluation.
@@ -94,7 +95,8 @@ class CloneDetectionBear(GlobalBear):
 
     def run(self,
             condition_list: ClangCountingConditions.counting_condition,
-            condition_weightings: typed_list(float)=None):
+            condition_weightings: typed_list(float)=None,
+            max_clone_difference: float=0.2):
         self.debug("Using the following counting conditions:")
         for condition in condition_list:
             self.debug(" *", condition.__name__)
@@ -113,7 +115,7 @@ class CloneDetectionBear(GlobalBear):
         for function_1, function_2 in combinations(count_matrices, 2):
             difference = self.compare_functions(count_matrices[function_1],
                                                 count_matrices[function_2])
-            if difference < 0.2:
+            if difference < max_clone_difference:
                 clones += 1
                 self.warn("Clone found! Difference of {} and {} is {}".format(
                     function_1[function_1.rfind("/")+1:function_1.rfind("(")],
