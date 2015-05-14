@@ -2,10 +2,13 @@ from itertools import combinations
 
 
 from coalib.bears.GlobalBear import GlobalBear
+from coalib.misc.i18n import _
 from bears.codeclone_detection.ClangCountVectorCreator import \
     ClangCountVectorCreator
 from bears.codeclone_detection import ClangCountingConditions
 from coalib.processes.SectionExecutor import get_cpu_count
+from coalib.results.RESULT_SEVERITY import RESULT_SEVERITY
+from coalib.results.Result import Result
 from coalib.settings.Setting import typed_dict
 from bears.codeclone_detection.CloneDetectionRoutines import \
     compare_functions, \
@@ -53,31 +56,20 @@ class CloneDetectionBear(GlobalBear):
             [(f1, f2, count_matrices)
              for f1, f2 in combinations(count_matrices, 2)])
 
-        self.debug("Outputting clones:")
-        function_duplications = {}
-        clones = 0
-        not_clones = 0
+        results = []
         for function_1, function_2, difference in differences:
             if difference < max_clone_difference:
-                clones += 1
-                self.warn("Clone found! Difference of {} and {} is {}".format(
-                    function_1[1][1], function_2[1][1], difference))
-                self.debug("Count Matrices:",
-                           str(count_matrices[function_1]),
-                           str(count_matrices[function_2]),
-                           delimiter="\n")
-                function_duplications[function_1] = True
-                function_duplications[function_2] = True
-            else:
-                not_clones += 1
-                self.debug("{} and {} are unique with difference {}.".format(
-                    function_1[1][1], function_2[1][1], difference))
+                results.append(Result(
+                    self.__class__.__name__,
+                    _("Code clone found. The other occurrence is at file "
+                      "{file}, line {line}, function {function}. The "
+                      "similarity is {similarity}.").format(
+                        file=function_2[0],
+                        line=function_2[1][0],
+                        function=function_2[1][1],
+                        similarity=1-difference),
+                    file=function_1[0],
+                    severity=RESULT_SEVERITY.MAJOR,
+                    line_nr=function_1[1][0]))
 
-        self.err("There are {} clone combinations and {} non-clone "
-                 "combinations of {} functions (others excluded "
-                 "heuristically).".format(clones,
-                                          not_clones,
-                                          len(count_matrices)))
-        self.err("{} functions are in duplication status, {} are not.".format(
-            list(function_duplications.values()).count(True),
-            list(function_duplications.values()).count(False)))
+        return results
