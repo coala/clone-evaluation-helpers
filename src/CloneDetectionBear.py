@@ -5,10 +5,12 @@ from coalib.bears.GlobalBear import GlobalBear
 from bears.codeclone_detection.ClangCountVectorCreator import \
     ClangCountVectorCreator
 from bears.codeclone_detection import ClangCountingConditions
+from coalib.processes.SectionExecutor import get_cpu_count
 from coalib.settings.Setting import typed_dict
 from bears.codeclone_detection.CloneDetectionRoutines import \
     compare_functions, \
     get_count_matrices
+import multiprocessing
 
 
 counting_condition_dict = typed_dict(
@@ -16,6 +18,14 @@ counting_condition_dict = typed_dict(
     ClangCountingConditions.condition_dict[str(setting).lower()],
     float,
     1)
+
+
+def get_difference(args):
+    function_1, function_2, count_matrices = args
+    return (function_1,
+            function_2,
+            compare_functions(count_matrices[function_1],
+                              count_matrices[function_2]))
 
 
 class CloneDetectionBear(GlobalBear):
@@ -36,20 +46,26 @@ class CloneDetectionBear(GlobalBear):
                                     list(condition_list.values())),
             self.file_dict.keys())
 
+        self.debug("Calculating differences...")
+        pool = multiprocessing.Pool(get_cpu_count())
+        differences = pool.map(
+            get_difference,
+            [(f1, f2, count_matrices)
+             for f1, f2 in combinations(count_matrices, 2)])
+
+        self.debug("Outputting clones:")
         function_duplications = {}
         clones = 0
         not_clones = 0
-        for function_1, function_2 in combinations(count_matrices, 2):
-            difference = compare_functions(count_matrices[function_1],
-                                           count_matrices[function_2])
+        for function_1, function_2, difference in differences:
             if difference < max_clone_difference:
                 clones += 1
                 self.warn("Clone found! Difference of {} and {} is {}".format(
                     function_1[1], function_2[1], difference))
-                self.warn("MATRICES:",
-                          str(count_matrices[function_1]),
-                          str(count_matrices[function_2]),
-                          delimiter="\n")
+                self.debug("Count Matrices:",
+                           str(count_matrices[function_1]),
+                           str(count_matrices[function_2]),
+                           delimiter="\n")
                 function_duplications[function_1] = True
                 function_duplications[function_2] = True
             else:
