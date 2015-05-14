@@ -4,17 +4,12 @@ from munkres import Munkres
 # Instantiate globally since this class is holding stateless public methods.
 munkres = Munkres()
 
+
 from coalib.bears.GlobalBear import GlobalBear
 from bears.codeclone_detection.ClangCountVectorCreator import \
     ClangCountVectorCreator
 from bears.codeclone_detection import ClangCountingConditions
-
-
-def int_list(setting):
-    if setting is None:
-        return None
-
-    return [int(elem) for elem in setting]
+from coalib.settings.Setting import typed_list
 
 
 class CloneDetectionBear(GlobalBear):
@@ -99,7 +94,7 @@ class CloneDetectionBear(GlobalBear):
 
     def run(self,
             condition_list: ClangCountingConditions.counting_condition,
-            weightings: int_list=None):
+            weightings: typed_list(int)=None):
         self.debug("Using the following counting conditions:")
         for condition in condition_list:
             self.debug(" *", condition.__name__)
