@@ -61,7 +61,7 @@ class CloneDetectionBear(GlobalBear):
             if difference < max_clone_difference:
                 clones += 1
                 self.warn("Clone found! Difference of {} and {} is {}".format(
-                    function_1[1], function_2[1], difference))
+                    function_1[1][1], function_2[1][1], difference))
                 self.debug("Count Matrices:",
                            str(count_matrices[function_1]),
                            str(count_matrices[function_2]),
@@ -71,7 +71,7 @@ class CloneDetectionBear(GlobalBear):
             else:
                 not_clones += 1
                 self.debug("{} and {} are unique with difference {}.".format(
-                    function_1[1], function_2[1], difference))
+                    function_1[1][1], function_2[1][1], difference))
 
         self.err("There are {} clone combinations and {} non-clone "
                  "combinations of {} functions (others excluded "
