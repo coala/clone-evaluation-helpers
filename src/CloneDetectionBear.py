@@ -36,8 +36,8 @@ class CloneDetectionBear(GlobalBear):
             condition_list: counting_condition_dict,
             max_clone_difference: float=0.2):
         if not isinstance(condition_list, dict):
-            self.err("The condition_list setting is not valid.")
-            counting_condition_dict(condition_list)
+            self.err("The condition_list setting is invalid. Code clone "
+                     "detection cannot run.")
             return
 
         self.debug("Using the following counting conditions:")

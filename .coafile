@@ -11,9 +11,9 @@ files = ./samples/tests/not_clones/*.c
 [NOT]
 enabled = true
 files = ./samples/tests/not_clones/*.c
-bears = CloneDetectionBear
+bears = ClangCloneDetectionBear
 
 [CLONES]
 enabled = true
 files = ./samples/tests/clones/*.c
-bears = CloneDetectionBear
+bears = ClangCloneDetectionBear
