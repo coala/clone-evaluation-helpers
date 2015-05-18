@@ -2,7 +2,22 @@
 log_level = DEBUG
 files = ../linux*/fs/configfs/*.c
 bears = ClangCloneDetectionBear
-condition_list = used: 0.5, is_param, returned, is_condition, in_condition, is_assignee, is_assigner, loop_content
+condition_list =
+  used: 0.5,
+  returned,
+  is_condition,
+  in_condition,
+  in_second_level_condition,
+  in_third_level_condition,
+  is_assignee,
+  is_assigner,
+  loop_content,
+  second_level_loop_content,
+  third_level_loop_content,
+  is_param,
+  in_sum: 0.7,
+  in_product: 0.7,
+  in_binary_operation: 0.7
 
 [FS]
 enabled = false
