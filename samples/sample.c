@@ -16,9 +16,16 @@ int glob;
 
 #define INC(a, b)  a = a + b
 
+struct test_type {
+    int member1,
+    int member2
+}
+
 int main(int t, char* args) {
     smile(t, glob);
     t = args = glob;
+    struct test_type *a_thing;
+    a_thing->member1 = 2;
 
     INC(t, 1);
 

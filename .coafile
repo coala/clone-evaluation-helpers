@@ -6,7 +6,7 @@ condition_list = used: 0.5, returned, is_condition, in_condition, is_assignee, i
 
 [PRINT]
 bears = ClangASTPrintBear
-files = ./samples/tests/not_clones/*.c
+files = ./samples/*.c
 
 [NOT]
 enabled = true
