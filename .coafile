@@ -1,19 +1,26 @@
 [DEFAULT]
-enabled = false
 log_level = DEBUG
+files = samples/tests/*/*.c
 bear_dirs = ./src/**
-condition_list = used: 0.5, returned, is_condition, in_condition, is_assignee, is_assigner, loop_content
+bears = CloneDetectionBenchmarkBear
+condition_list =
+  used: 0.5,
+  returned,
+  is_condition,
+  in_condition,
+  in_second_level_condition,
+  in_third_level_condition,
+  is_assignee,
+  is_assigner,
+  loop_content,
+  second_level_loop_content,
+  third_level_loop_content,
+  is_param,
+  in_sum: 0.7,
+  in_product: 0.7,
+  in_binary_operation: 0.7
 
 [PRINT]
+enabled = false
 bears = ClangASTPrintBear
 files = ./samples/*.c
-
-[NOT]
-enabled = true
-files = ./samples/tests/not_clones/*.c
-bears = ClangCloneDetectionBear
-
-[CLONES]
-enabled = true
-files = ./samples/tests/clones/*.c
-bears = ClangCloneDetectionBear
