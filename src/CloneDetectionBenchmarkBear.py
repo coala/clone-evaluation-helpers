@@ -18,8 +18,8 @@ class CloneDetectionBenchmarkBear(GlobalBear):
         '''
         differences = dependency_results["ClangSimilarityBear"][0].contents
 
-        clones_diffs = []
-        non_clones_diffs = []
+        clones_diffs = [0]
+        non_clones_diffs = [1]
 
         for function_1, function_2, difference in differences:
             if function_1[0] != function_2[0]:
@@ -35,6 +35,8 @@ class CloneDetectionBenchmarkBear(GlobalBear):
 
         self.warn("Maximum clone difference:", str(max(clones_diffs)))
         self.warn("Minimum non-clone difference:", str(min(non_clones_diffs)))
+        if max(clones_diffs) > min(non_clones_diffs):
+            self.err("Code clone detection failed!")
 
         plt.hlines(1, 0, 1, label='_nolegend_')
         plt.xlim(0, 1)
