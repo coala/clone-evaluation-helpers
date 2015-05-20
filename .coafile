@@ -4,7 +4,6 @@ files = samples/tests/*/*.c
 bear_dirs = ./src/**
 bears = CloneDetectionBenchmarkBear
 condition_list =
-  used: 0.5,
   returned,
   is_condition,
   in_condition,
@@ -16,9 +15,9 @@ condition_list =
   second_level_loop_content,
   third_level_loop_content,
   is_param,
-  in_sum: 0.7,
-  in_product: 0.7,
-  in_binary_operation: 0.7
+  in_sum,
+  in_product,
+  in_binary_operation
 
 [PRINT]
 enabled = false
