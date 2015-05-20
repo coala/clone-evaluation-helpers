@@ -36,15 +36,15 @@ class CloneDetectionBenchmarkBear(GlobalBear):
         self.warn("Maximum clone difference:", str(max(clones_diffs)))
         self.warn("Minimum non-clone difference:", str(min(non_clones_diffs)))
 
-        plt.hlines(1, 0, 1)
+        plt.hlines(1, 0, 1, label='_nolegend_')
         plt.xlim(0, 1)
         plt.ylim(0.5, 1.5)
 
         y = np.ones(np.shape(clones_diffs))
-        plt.plot(clones_diffs, y, '|', ms=40)
+        plt.plot(clones_diffs, y, '|', ms=40, color='r', label="Clones")
         y = np.ones(np.shape(non_clones_diffs))
-        plt.plot(non_clones_diffs, y, '|', ms=40, color='m')
-        plt.axis('off')
+        plt.plot(non_clones_diffs, y, '|', ms=40, color='g',
+                 label="Non-Clones")
         plt.show()
 
     @staticmethod
