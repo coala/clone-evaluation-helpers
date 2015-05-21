@@ -38,7 +38,6 @@ class CloneDetectionBenchmarkBear(GlobalBear):
         if max(clones_diffs) > min(non_clones_diffs):
             self.err("Code clone detection failed!")
 
-        plt.hlines(1, 0, 1, label='_nolegend_')
         plt.xlim(0, 1)
         plt.ylim(0.5, 1.5)
 
@@ -47,6 +46,7 @@ class CloneDetectionBenchmarkBear(GlobalBear):
         y = np.ones(np.shape(non_clones_diffs))
         plt.plot(non_clones_diffs, y, '|', ms=40, color='g',
                  label="Non-Clones")
+        plt.grid()
         plt.show()
 
     @staticmethod
