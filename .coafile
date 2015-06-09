@@ -1,6 +1,6 @@
 [DEFAULT]
 log_level = DEBUG
-files = samples/tests/*/*.c
+files = ../coala/bears/**/clone_detection_samples/**/*.c
 bear_dirs = ./src/**
 bears = CloneDetectionBenchmarkBear
 condition_list =
