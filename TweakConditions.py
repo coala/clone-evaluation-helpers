@@ -20,21 +20,21 @@ third_level_loop_content: 1.0,
 second_level_loop_content: 1.0,
 returned: 0.0,
 member_accessed: 1.0,
-loop_content: 1.2,
-is_param: 1.0,
-is_condition: 0.0,
-is_called: 1.0,
+loop_content: 0.4,
+is_param: 0.0,
+is_condition: 0.8,
+is_called: 0.0,
 is_call_param: 1.0,
-is_assigner: 0.0,
-is_assignee: 1.0,
+is_assigner: 0.2,
+is_assignee: 0.5,
 in_third_level_condition: 1.0,
-in_sum: 1.0,
-in_second_level_condition: 1.0,
-in_product: 1.0,
+in_sum: 1.8,
+in_second_level_condition: 1.2,
+in_product: 0.8,
 in_condition: 1.0,
 in_binary_operation: 1.0"""))
 
-weighting_range = [x/10 for x in range(0, 20)]
+weighting_range = [x/5 for x in range(0, 10)]
 
 section = Section("default")
 section.append(Setting("files",
@@ -86,6 +86,7 @@ def optimize_key(c_dict, key, old_fitness):
 
 if __name__ == '__main__':
     new_fitness = fitness(sorted_dict)
+    print("Initial fitness:", new_fitness)
     for key in sorted_dict.keys():
         new_fitness = optimize_key(sorted_dict, key, new_fitness)
         print("Weightings are:")

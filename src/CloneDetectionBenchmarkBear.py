@@ -21,7 +21,13 @@ class CloneDetectionBenchmarkBear(GlobalBear):
         clones_diffs = [0]
         non_clones_diffs = [1]
 
+        seen_functions = []
         for function_1, function_2, difference in differences:
+            if function_1[0] not in seen_functions:
+                seen_functions.append(function_1[0])
+            if function_2[0] not in seen_functions:
+                seen_functions.append(function_2[0])
+
             if function_1[0] != function_2[0]:
                 continue
 
@@ -29,6 +35,8 @@ class CloneDetectionBenchmarkBear(GlobalBear):
                 clones_diffs.append(difference)
             else:
                 non_clones_diffs.append(difference)
+
+        print("\n".join(seen_functions))
 
         self.warn(" CD:", str(clones_diffs))
         self.warn("NCD:", str(non_clones_diffs))
