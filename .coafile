@@ -3,23 +3,6 @@ log_level = DEBUG
 files = ../coala/bears/**/clone_detection_samples/**/*.c
 bear_dirs = ./src/**
 bears = CloneDetectionBenchmarkBear
-condition_list =    third_level_loop_content: 1,
-   second_level_loop_content: 1,
-   returned: 0,
-   member_accessed: 1,
-   loop_content: 1.2,
-   is_param: 1,
-   is_condition: 0,
-   is_called: 1,
-   is_call_param: 1,
-   is_assigner: 0,
-   is_assignee: 1,
-   in_third_level_condition: 1,
-   in_sum: 1,
-   in_second_level_condition: 1,
-   in_product: 1,
-   in_condition: 1,
-   in_binary_operation: 1
 
 [PRINT]
 enabled = false
