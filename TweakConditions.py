@@ -34,7 +34,7 @@ in_product: 1.0,
 in_condition: 1.0,
 in_binary_operation: 1.0"""))
 
-weighting_range = [1, 0.8, 0.6, 0.4, 0.2, 0, 1.2, 1.4, 1.6, 1.8, 2]
+weighting_range = [x/10 for x in range(0, 20)]
 
 section = Section("default")
 section.append(Setting("files",
