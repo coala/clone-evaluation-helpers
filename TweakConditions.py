@@ -15,24 +15,24 @@ from coalib.settings.Setting import Setting
 
 condition_dict = counting_condition_dict(StringConverter(
     """
-used: 0.0,
-third_level_loop_content: 1.0,
-second_level_loop_content: 1.0,
-returned: 0.0,
-member_accessed: 1.0,
-loop_content: 0.4,
-is_param: 0.0,
-is_condition: 0.8,
-is_called: 0.0,
-is_call_param: 1.0,
-is_assigner: 0.2,
-is_assignee: 0.5,
-in_third_level_condition: 1.0,
-in_sum: 1.8,
-in_second_level_condition: 1.2,
-in_product: 0.8,
-in_condition: 1.0,
-in_binary_operation: 1.0"""))
+   in_binary_operation: 1.0,
+   in_condition: 1.8,
+   in_product: 0.0,
+   in_second_level_condition: 1.2,
+   in_sum: 1.8,
+   in_third_level_condition: 1.0,
+   is_assignee: 0.5,
+   is_assigner: 1.0,
+   is_call_param: 0.8,
+   is_called: 1.0,
+   is_condition: 0.0,
+   is_param: 1.2,
+   loop_content: 0.2,
+   member_accessed: 1.0,
+   returned: 0.0,
+   second_level_loop_content: 1.0,
+   third_level_loop_content: 1.0,
+   used: 0.0"""))
 
 weighting_range = [x/5 for x in range(0, 10)]
 non_excluded_functions = ["faculty(int)", "faculty1(int)", "faculty2(int)",
@@ -49,8 +49,8 @@ log_printer = ConsolePrinter()
 filename_list = collect_files(['/home/lasse/prog/coala/bears/tests/codeclone_detection/clone_detection_samples/**/*.c'], log_printer)
 file_dict = get_file_dict(filename_list, log_printer)
 
-sorted_dict = OrderedDict(reversed(sorted(condition_dict.items(),
-                                 key=lambda f: f[0].__name__)))
+sorted_dict = OrderedDict(sorted(condition_dict.items(),
+                                 key=lambda f: f[0].__name__))
 message_queue = Queue()
 
 
@@ -77,7 +77,7 @@ def fitness(c_dict):
             non_clones_diffs.append(difference)
 
     if len(these_nonexcluded) > 0:
-        return -1
+        return -len(these_nonexcluded)
 
     return min(non_clones_diffs) - max(clones_diffs)
 

@@ -4,6 +4,9 @@ files = ../coala/bears/**/clone_detection_samples/**/*.c
 bear_dirs = ./src/**
 bears = CloneDetectionBenchmarkBear
 
+[WEIGHT]
+bears = CountingConditionsTweakBear
+
 [PRINT]
 enabled = false
 bears = ClangASTPrintBear
