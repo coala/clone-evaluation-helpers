@@ -35,6 +35,9 @@ in_condition: 1.0,
 in_binary_operation: 1.0"""))
 
 weighting_range = [x/5 for x in range(0, 10)]
+non_excluded_functions = ["faculty(int)", "faculty1(int)", "faculty2(int)",
+                          "clearScreen()", "original(int)", "sumProd(int)",
+                          "scrollUp()"]
 
 section = Section("default")
 section.append(Setting("files",
@@ -58,14 +61,23 @@ def fitness(c_dict):
     clones_diffs = [0]
     non_clones_diffs = [1]
     clones=".*\/clones.*"
-    for function_1, function_2, difference in differences:
-            if function_1[0] != function_2[0]:
-                continue
+    these_nonexcluded = non_excluded_functions.copy()
 
-            if re.match(clones, function_1[0]) is not None:
-                clones_diffs.append(difference)
-            else:
-                non_clones_diffs.append(difference)
+    for function_1, function_2, difference in differences:
+        if function_1[2] in these_nonexcluded:
+            these_nonexcluded.remove(function_1[2])
+        if function_2[2] in these_nonexcluded:
+            these_nonexcluded.remove(function_2[2])
+        if function_1[0] != function_2[0]:
+            continue
+
+        if re.match(clones, function_1[0]) is not None:
+            clones_diffs.append(difference)
+        else:
+            non_clones_diffs.append(difference)
+
+    if len(these_nonexcluded) > 0:
+        return -1
 
     return min(non_clones_diffs) - max(clones_diffs)
 
