@@ -12,7 +12,7 @@ from coalib.bears.GlobalBear import GlobalBear
 class CountingConditionsTweakBear(GlobalBear):
     def get_differences(self, count_matrices):
         f_combinations = [(f1, f2, count_matrices)
-                                 for f1, f2 in combinations(count_matrices, 2)]
+                          for f1, f2 in combinations(count_matrices, 2)]
         differences = []
         for i, elem in enumerate(map(get_difference, f_combinations)):
             differences.append(elem)
