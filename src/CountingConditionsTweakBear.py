@@ -45,7 +45,8 @@ class CountingConditionsTweakBear(GlobalBear):
         # Each file must have one result yielded at least. If not some
         # function was ignored invalidly and that shouldn't be.
         if len(must_have) > 0:
-            return -len(must_have)
+            return -len(must_have), 0
+
         return min(non_clones_diffs) - max(clones_diffs), max(clones_diffs)
 
     def optimize_weighting(self,
@@ -56,7 +57,7 @@ class CountingConditionsTweakBear(GlobalBear):
                            old_fitness):
         self.debug("Optimizing condition", conditions[i].__name__, "...")
         best = (weightings[i], old_fitness)
-        for weighting in [x/10 for x in range(0, 20)]:
+        for weighting in [x/5 for x in range(11)]:
             weightings[i] = weighting
             fit, mini = self.fitness(conditions, weightings, clones)
             if fit > best[1]:
