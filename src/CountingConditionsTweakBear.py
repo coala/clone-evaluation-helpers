@@ -3,7 +3,7 @@ import re
 
 from bears.codeclone_detection.ClangCountVectorCreator import \
     ClangCountVectorCreator
-from bears.codeclone_detection.ClangSimilarityBear import \
+from bears.codeclone_detection.ClangFunctionDifferenceBear import \
     counting_condition_dict, default_cc_dict, get_difference
 from bears.codeclone_detection.CloneDetectionRoutines import get_count_matrices
 from coalib.bears.GlobalBear import GlobalBear
@@ -11,7 +11,7 @@ from coalib.bears.GlobalBear import GlobalBear
 
 class CountingConditionsTweakBear(GlobalBear):
     def get_differences(self, count_matrices):
-        f_combinations = [(f1, f2, count_matrices)
+        f_combinations = [(f1, f2, count_matrices, False, True)
                           for f1, f2 in combinations(count_matrices, 2)]
         differences = []
         for i, elem in enumerate(map(get_difference, f_combinations)):
@@ -42,6 +42,10 @@ class CountingConditionsTweakBear(GlobalBear):
                 clones_diffs.append(difference)
             else:
                 non_clones_diffs.append(difference)
+
+        for filename in must_have:
+            if not re.match(clones, filename):
+                must_have.remove(filename)
 
         # Each file must have one result yielded at least. If not some
         # function was ignored invalidly and that shouldn't be.
