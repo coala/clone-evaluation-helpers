@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 from coalib.bears.GlobalBear import GlobalBear
-from bears.codeclone_detection.ClangSimilarityBear import ClangSimilarityBear
+from bears.codeclone_detection.ClangFunctionDifferenceBear import ClangFunctionDifferenceBear
 
 
 class CloneDetectionBenchmarkBear(GlobalBear):
@@ -16,7 +16,7 @@ class CloneDetectionBenchmarkBear(GlobalBear):
         :param clones:     A regex matching paths of files that contain known
                            clones. All others are considered non-clones.
         '''
-        differences = dependency_results["ClangSimilarityBear"][0].contents
+        differences = dependency_results["ClangFunctionDifferenceBear"][0].contents
 
         clones_diffs = [0]
         non_clones_diffs = [1]
@@ -38,8 +38,8 @@ class CloneDetectionBenchmarkBear(GlobalBear):
 
         print("\n".join(seen_functions))
 
-        self.warn(" CD:", str(clones_diffs))
-        self.warn("NCD:", str(non_clones_diffs))
+        self.warn(" CD:", str(sorted(clones_diffs)))
+        self.warn("NCD:", str(sorted(non_clones_diffs)))
 
         self.warn("Maximum clone difference:", str(max(clones_diffs)))
         self.warn("Minimum non-clone difference:", str(min(non_clones_diffs)))
@@ -59,4 +59,4 @@ class CloneDetectionBenchmarkBear(GlobalBear):
 
     @staticmethod
     def get_dependencies():
-        return [ClangSimilarityBear]
+        return [ClangFunctionDifferenceBear]

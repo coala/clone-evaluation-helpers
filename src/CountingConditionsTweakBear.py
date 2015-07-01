@@ -24,7 +24,8 @@ class CountingConditionsTweakBear(GlobalBear):
             ClangCountVectorCreator(conditions,
                                     weightings,
                                     self.section["files"].origin),
-            list(self.file_dict.keys())))
+            list(self.file_dict.keys()),
+            lambda x: x))
 
         clones_diffs = [0]
         non_clones_diffs = [1]
