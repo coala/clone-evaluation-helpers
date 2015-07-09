@@ -13,18 +13,23 @@ import functools
 from coalib.settings.Setting import path
 
 
-def get_differences(count_matrices):
-    f_combinations = [(f1, f2, count_matrices, True, True)
+def ret_diffs(count_matrices):
+    f_combinations = [(f1, f2)
                       for f1, f2 in combinations(count_matrices, 2)]
     differences = []
-    for i, elem in enumerate(map(get_difference, f_combinations)):
+    partial_get_difference = functools.partial(
+            get_difference,
+            count_matrices=count_matrices,
+            average_calculation=False,
+            reduce_big_diffs=True)
+    for i, elem in enumerate(map(partial_get_difference, f_combinations)):
         differences.append(elem)
 
     return differences
 
 
 def fitness(file_dict, conditions, weightings, clones, origin):
-    differences = get_differences(get_count_matrices(
+    differences = ret_diffs(get_count_matrices(
         ClangCountVectorCreator(conditions,
                                 weightings,
                                 path(origin)),
