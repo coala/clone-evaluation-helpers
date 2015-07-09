@@ -87,7 +87,10 @@ class CountingConditionsTweakBear(GlobalBear):
         self.debug("Optimizing condition", conditions[i].__name__, "...")
         best = (weightings[i], old_fitness)
         possible_weightings = [x/5 for x in range(11)]
-        possible_weightings.remove(weightings[i])
+        try:
+            possible_weightings.remove(weightings[i])
+        except ValueError:
+            pass
 
         pool = multiprocessing.Pool(get_cpu_count())
 
