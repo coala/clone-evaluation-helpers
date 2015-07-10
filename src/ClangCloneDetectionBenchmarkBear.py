@@ -6,7 +6,7 @@ from coalib.bears.GlobalBear import GlobalBear
 from bears.codeclone_detection.ClangFunctionDifferenceBear import ClangFunctionDifferenceBear
 
 
-class CloneDetectionBenchmarkBear(GlobalBear):
+class ClangCloneDetectionBenchmarkBear(GlobalBear):
     def run(self,
             dependency_results: dict,
             clones: str=".*\/clones.*"):

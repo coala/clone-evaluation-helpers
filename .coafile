@@ -2,7 +2,7 @@
 log_level = DEBUG
 files = ../coala/bears/**/clone_detection_samples/**/*.c
 bear_dirs = ./src/**
-bears = CloneDetectionBenchmarkBear
+bears = ClangCloneDetectionBenchmarkBear
 
 [WEIGHT]
 bears = ClangCCOptimizeBear
