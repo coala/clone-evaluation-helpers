@@ -4,9 +4,6 @@ files = ../coala/bears/**/clone_detection_samples/**/*.c
 bear_dirs = ./src/**
 bears = ClangCloneDetectionBenchmarkBear
 
-[WEIGHT]
-bears = ClangCCOptimizeBear
-
 counting_conditions = used,
 returned,
 is_condition,
@@ -25,6 +22,9 @@ in_sum,
 in_product,
 in_binary_operation,
 member_accessed
+
+[WEIGHT]
+bears = ClangCCOptimizeBear
 
 [PRINT]
 enabled = false

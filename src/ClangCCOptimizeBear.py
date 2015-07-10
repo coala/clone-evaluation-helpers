@@ -21,7 +21,7 @@ def ret_diffs(count_matrices):
             get_difference,
             count_matrices=count_matrices,
             average_calculation=False,
-            reduce_big_diffs=True)
+            reduce_big_diffs=False)
     for i, elem in enumerate(map(partial_get_difference, f_combinations)):
         differences.append(elem)
 
