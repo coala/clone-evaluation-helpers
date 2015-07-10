@@ -7,6 +7,25 @@ bears = ClangCloneDetectionBenchmarkBear
 [WEIGHT]
 bears = ClangCCOptimizeBear
 
+condition_list = used,
+returned,
+is_condition,
+in_condition,
+in_second_level_condition,
+in_third_level_condition,
+is_assignee,
+is_assigner,
+loop_content,
+second_level_loop_content,
+third_level_loop_content,
+is_param,
+is_called,
+is_call_param,
+in_sum,
+in_product,
+in_binary_operation,
+member_accessed
+
 [PRINT]
 enabled = false
 bears = ClangASTPrintBear

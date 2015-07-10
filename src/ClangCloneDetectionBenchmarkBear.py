@@ -53,6 +53,7 @@ class ClangCloneDetectionBenchmarkBear(GlobalBear):
 
         self.warn("Maximum clone difference:", str(max(clones_diffs)))
         self.warn("Minimum non-clone difference:", str(min(non_clones_diffs)))
+        self.warn("Fitnes:", str(min(non_clones_diffs)-max(clones_diffs)))
         if max(clones_diffs) > min(non_clones_diffs) or must_have:
             self.err("Code clone detection failed!")
 

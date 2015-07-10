@@ -103,8 +103,8 @@ class ClangCCOptimizeBear(GlobalBear):
             conditions=conditions,
             clones=clones)
 
-        for fit, mini, weighting in pool.imap_unordered(part_fitness,
-                                                        possible_weightings):
+        for fit, mini, weighting in pool.imap(part_fitness,
+                                              possible_weightings):
             if fit > best[1]:
                 self.debug("New fitness found:", fit,
                            ", minimal threshold:", mini)
