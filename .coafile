@@ -7,7 +7,7 @@ bears = ClangCloneDetectionBenchmarkBear
 [WEIGHT]
 bears = ClangCCOptimizeBear
 
-condition_list = used,
+counting_conditions = used,
 returned,
 is_condition,
 in_condition,

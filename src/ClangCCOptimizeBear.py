@@ -140,10 +140,10 @@ class ClangCCOptimizeBear(GlobalBear):
                 weightings[i]))
 
     def run(self,
-            condition_list: counting_condition_dict=default_cc_dict,
+            counting_conditions: counting_condition_dict=default_cc_dict,
             clones: str=".*\/clones.*"):
-        conditions = list(condition_list.keys())
-        weightings = list(condition_list.values())
+        conditions = list(counting_conditions.keys())
+        weightings = list(counting_conditions.values())
 
         self.debug("The following counting conditions and weightings will be "
                    "used as starting values:")
