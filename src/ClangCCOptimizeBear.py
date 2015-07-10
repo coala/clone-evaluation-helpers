@@ -77,7 +77,7 @@ def exchanged_fitness(weighting,
     return tup[0], tup[1], weighting
 
 
-class CountingConditionsTweakBear(GlobalBear):
+class ClangCCOptimizeBear(GlobalBear):
     def optimize_weighting(self,
                            conditions,
                            weightings,
