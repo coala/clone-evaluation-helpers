@@ -83,7 +83,8 @@ class ClangCCOptimizeBear(GlobalBear):
                            weightings,
                            clones,
                            i,
-                           old_fitness):
+                           old_fitness,
+                           mini):
         self.debug("Optimizing condition", conditions[i].__name__, "...")
         best = (weightings[i], old_fitness)
         possible_weightings = [x/5 for x in range(11)]
@@ -103,17 +104,19 @@ class ClangCCOptimizeBear(GlobalBear):
             conditions=conditions,
             clones=clones)
 
-        for fit, mini, weighting in pool.imap(part_fitness,
+        for fit, _mini, weighting in pool.imap(part_fitness,
                                               possible_weightings):
             if fit > best[1]:
-                self.debug("New fitness found:", fit,
-                           ", minimal threshold:", mini)
-                self.warn("New value for {}: {}".format(
-                    conditions[i].__name__,
-                    weighting))
                 best = weighting, fit
+                mini = _mini
 
-        weightings[i] = best[0]
+        if weightings[i] != best[0]:
+            self.debug("New fitness found:", best[1],
+                       ", minimal threshold:", mini)
+            self.warn("New value for {}: {}".format(
+                conditions[i].__name__,
+                best[0]))
+            weightings[i] = best[0]
         return best[1]
 
     def optimize_weightings(self, conditions, initial_weightings, clones):
@@ -129,7 +132,8 @@ class ClangCCOptimizeBear(GlobalBear):
                 initial_weightings,
                 clones,
                 i,
-                fit)
+                fit,
+                mini)
 
         return initial_weightings
 
