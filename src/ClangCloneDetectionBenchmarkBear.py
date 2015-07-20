@@ -20,8 +20,8 @@ class ClangCloneDetectionBenchmarkBear(GlobalBear):
         '''
         differences = dependency_results["ClangFunctionDifferenceBear"][0].contents
 
-        clones_diffs = [0]
-        non_clones_diffs = [1]
+        clones_diffs = {0: None}
+        non_clones_diffs = {1: None}
 
         seen_functions = []
         must_have = list(self.file_dict.keys())
@@ -38,16 +38,22 @@ class ClangCloneDetectionBenchmarkBear(GlobalBear):
                 must_have.remove(function_1[0])
 
             if re.match(clones, function_1[0]) is not None:
-                clones_diffs.append(difference)
+                app_to = clones_diffs
             else:
-                non_clones_diffs.append(difference)
+                app_to = non_clones_diffs
+
+            val = app_to.get(difference, None)
+            if val is None:
+                app_to[difference] = [(function_1[2], function_2[2])]
+            else:
+                val.append((function_1[2], function_2[2]))
 
         for filename in must_have:
             if not re.match(clones, filename):
                 must_have.remove(filename)
 
-        self.warn(" CD:", str(sorted(clones_diffs)))
-        self.warn("NCD:", str(sorted(non_clones_diffs)))
+        self.warn(" CD:", str(sorted(clones_diffs.keys())))
+        self.warn("NCD:", str(sorted(non_clones_diffs.keys())))
         if must_have:
             self.err("The following clone samples were ignored:", must_have)
 
@@ -56,6 +62,10 @@ class ClangCloneDetectionBenchmarkBear(GlobalBear):
         self.warn("Fitness:", str(min(non_clones_diffs)-max(clones_diffs)))
         if max(clones_diffs) > min(non_clones_diffs) or must_have:
             self.err("Code clone detection failed!")
+
+        self.warn("Defining clone pairs are:\n Clone : {}\n NClone: {}".format(
+            clones_diffs[max(clones_diffs)],
+            non_clones_diffs[min(non_clones_diffs)]))
 
         if plot:
             plt.xlim(0, 1)
