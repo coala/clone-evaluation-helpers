@@ -68,6 +68,8 @@ class ClangCloneDetectionBenchmarkBear(GlobalBear):
             non_clones_diffs[min(non_clones_diffs)]))
 
         if plot:
+            clones_diffs = list(clones_diffs.keys())
+            non_clones_diffs = list(non_clones_diffs.keys())
             plt.xlim(0, 1)
             plt.ylim(0.5, 1.5)
 

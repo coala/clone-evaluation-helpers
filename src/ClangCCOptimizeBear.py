@@ -176,7 +176,7 @@ class ClangCCOptimizeBear(GlobalBear):
 
     def debug_weightings(self, conditions, weightings):
         for i in range(len(conditions)):
-            self.debug("    {}: {},".format(
+            print("  {}: {},".format(
                 conditions[i].__name__,
                 weightings[i]))
 
