@@ -10,20 +10,21 @@ from bears.codeclone_detection.CloneDetectionRoutines import get_count_matrices
 from coalib.bears.GlobalBear import GlobalBear
 from coalib.processes.Processing import get_cpu_count
 import functools
-from coalib.settings.Setting import path
 
 
 def ret_diffs(count_matrices,
-              average_calculation=False,
-              reduce_big_diffs=True):
+              average_calculation,
+              poly_postprocessing,
+              exp_postprocessing):
     f_combinations = [(f1, f2)
                       for f1, f2 in combinations(count_matrices, 2)]
     differences = []
     partial_get_difference = functools.partial(
-            get_difference,
-            count_matrices=count_matrices,
-            average_calculation=average_calculation,
-            reduce_big_diffs=reduce_big_diffs)
+        get_difference,
+        count_matrices=count_matrices,
+        average_calculation=average_calculation,
+        poly_postprocessing=poly_postprocessing,
+        exp_postprocessing=exp_postprocessing)
     for i, elem in enumerate(map(partial_get_difference, f_combinations)):
         differences.append(elem)
 
@@ -35,16 +36,18 @@ def fitness(file_dict,
             weightings,
             clones,
             origin,
-            average_calculation=False,
-            reduce_big_diffs=True):
+            average_calculation,
+            poly_postprocessing,
+            exp_postprocessing):
     differences = ret_diffs(get_count_matrices(
         ClangCountVectorCreator(conditions,
-                                weightings,
-                                path(origin)),
+                                weightings),
         list(file_dict.keys()),
-        lambda x: x),
+        lambda x: x,
+        origin),
         average_calculation=average_calculation,
-        reduce_big_diffs=reduce_big_diffs)
+        poly_postprocessing=poly_postprocessing,
+        exp_postprocessing=exp_postprocessing)
 
     clones_diffs = [0]
     non_clones_diffs = [1]
@@ -79,15 +82,17 @@ def exchanged_fitness(weighting,
                       weightings,
                       clones,
                       origin,
-                      average_calculation=False,
-                      reduce_big_diffs=True):
+                      average_calculation,
+                      poly_postprocessing,
+                      exp_postprocessing):
     tup = fitness(file_dict,
                   conditions,
                   weightings[:i]+[weighting]+weightings[i+1:],
                   clones,
                   origin,
                   average_calculation=average_calculation,
-                  reduce_big_diffs=reduce_big_diffs)
+                  poly_postprocessing=poly_postprocessing,
+                  exp_postprocessing=exp_postprocessing)
     return tup[0], tup[1], weighting
 
 
@@ -99,8 +104,9 @@ class ClangCCOptimizeBear(GlobalBear):
                            i,
                            old_fitness,
                            mini,
-                           average_calculation=False,
-                           reduce_big_diffs=True):
+                           average_calculation,
+                           poly_postprocessing,
+                           exp_postprocessing):
         self.debug("Optimizing condition", conditions[i].__name__, "...")
         best = (weightings[i], old_fitness)
         possible_weightings = [x/5 for x in range(11)]
@@ -116,14 +122,15 @@ class ClangCCOptimizeBear(GlobalBear):
             i=i,
             weightings=weightings,
             file_dict=self.file_dict,
-            origin=self.section["files"],
+            origin=self.section["files"].origin,
             conditions=conditions,
             clones=clones,
             average_calculation=average_calculation,
-            reduce_big_diffs=reduce_big_diffs)
+            poly_postprocessing=poly_postprocessing,
+            exp_postprocessing=exp_postprocessing)
 
         for fit, _mini, weighting in pool.imap(part_fitness,
-                                              possible_weightings):
+                                               possible_weightings):
             if fit > best[1]:
                 best = weighting, fit
                 mini = _mini
@@ -141,13 +148,17 @@ class ClangCCOptimizeBear(GlobalBear):
                             conditions,
                             initial_weightings,
                             clones,
-                            average_calculation=False,
-                            reduce_big_diffs=True):
+                            average_calculation,
+                            poly_postprocessing,
+                            exp_postprocessing):
         fit, mini = fitness(self.file_dict,
                             conditions,
                             initial_weightings,
                             clones,
-                            self.section["files"])
+                            self.section["files"].origin,
+                            average_calculation,
+                            poly_postprocessing,
+                            exp_postprocessing)
         self.debug("Initial fitness:", fit, ", minimal threshold:", mini)
         for i in range(len(initial_weightings)):
             fit = self.optimize_weighting(
@@ -158,7 +169,8 @@ class ClangCCOptimizeBear(GlobalBear):
                 fit,
                 mini,
                 average_calculation=average_calculation,
-                reduce_big_diffs=reduce_big_diffs)
+                poly_postprocessing=poly_postprocessing,
+                exp_postprocessing=exp_postprocessing)
 
         return initial_weightings
 
@@ -172,7 +184,8 @@ class ClangCCOptimizeBear(GlobalBear):
             counting_conditions: counting_condition_dict=default_cc_dict,
             clones: str=".*\/clones.*",
             average_calculation: bool=False,
-            reduce_big_diffs: bool=True):
+            poly_postprocessing: bool=True,
+            exp_postprocessing: bool=True):
         conditions = list(counting_conditions.keys())
         weightings = list(counting_conditions.values())
 
@@ -188,7 +201,8 @@ class ClangCCOptimizeBear(GlobalBear):
                 weightings,
                 clones,
                 average_calculation=average_calculation,
-                reduce_big_diffs=reduce_big_diffs)
+                poly_postprocessing=poly_postprocessing,
+                exp_postprocessing=exp_postprocessing)
             self.debug_weightings(conditions, weightings)
             if old != weightings:
                 self.debug("Continuing investigation.")
