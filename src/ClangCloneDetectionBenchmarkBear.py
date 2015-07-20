@@ -46,8 +46,6 @@ class ClangCloneDetectionBenchmarkBear(GlobalBear):
             if not re.match(clones, filename):
                 must_have.remove(filename)
 
-        print("\n".join(seen_functions))
-
         self.warn(" CD:", str(sorted(clones_diffs)))
         self.warn("NCD:", str(sorted(non_clones_diffs)))
         if must_have:
@@ -55,7 +53,7 @@ class ClangCloneDetectionBenchmarkBear(GlobalBear):
 
         self.warn("Maximum clone difference:", str(max(clones_diffs)))
         self.warn("Minimum non-clone difference:", str(min(non_clones_diffs)))
-        self.warn("Fitnes:", str(min(non_clones_diffs)-max(clones_diffs)))
+        self.warn("Fitness:", str(min(non_clones_diffs)-max(clones_diffs)))
         if max(clones_diffs) > min(non_clones_diffs) or must_have:
             self.err("Code clone detection failed!")
 

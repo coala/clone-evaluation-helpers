@@ -5,6 +5,7 @@ bear_dirs = ./src/**
 bears = ClangCloneDetectionBenchmarkBear
 
 [WEIGHT]
+enabled = false
 bears = ClangCCOptimizeBear
 
 [PRINT]
