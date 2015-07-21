@@ -23,3 +23,8 @@ git clone https://github.com/coala-analyzer/clone-evaluation-helpers
 cd clone-evaluation-helpers
 coala
 ```
+
+> **Note**:
+>
+> This code relies on coala being cloned from the parent directory of where it
+> lies, i.e. `../coala/` must lead to your coala source.
