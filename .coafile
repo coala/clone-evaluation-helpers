@@ -4,6 +4,7 @@ files = ../coala/bears/**/clone_detection_samples/**/*.c
 add_include_paths = ../coala/bears/tests/codeclone_detection/*samples/
 bear_dirs = ./src/**
 bears = ClangCloneDetectionBenchmarkBear
+
 counting_conditions =
 used,
 returned,
@@ -23,6 +24,10 @@ in_sum,
 in_product,
 in_binary_operation,
 member_accessed
+
+average_calculation = false
+poly_postprocessing = true
+exp_postprocessing = false
 
 [WEIGHT]
 enabled = false
