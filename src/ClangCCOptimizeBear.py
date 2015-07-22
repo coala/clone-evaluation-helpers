@@ -41,14 +41,14 @@ def fitness(file_dict,
             average_calculation,
             poly_postprocessing,
             exp_postprocessing,
-            add_include_paths):
+            extra_include_paths):
     differences = ret_diffs(get_count_matrices(
         ClangCountVectorCreator(conditions,
                                 weightings),
         list(file_dict.keys()),
         lambda x: x,
         origin,
-        add_include_paths),
+        extra_include_paths),
         average_calculation=average_calculation,
         poly_postprocessing=poly_postprocessing,
         exp_postprocessing=exp_postprocessing)
@@ -89,7 +89,7 @@ def exchanged_fitness(weighting,
                       average_calculation,
                       poly_postprocessing,
                       exp_postprocessing,
-                      add_include_paths):
+                      extra_include_paths):
     tup = fitness(file_dict,
                   conditions,
                   weightings[:i]+[weighting]+weightings[i+1:],
@@ -98,7 +98,7 @@ def exchanged_fitness(weighting,
                   average_calculation=average_calculation,
                   poly_postprocessing=poly_postprocessing,
                   exp_postprocessing=exp_postprocessing,
-                  add_include_paths=add_include_paths)
+                  extra_include_paths=extra_include_paths)
     return tup[0], tup[1], weighting
 
 
@@ -113,7 +113,7 @@ class ClangCCOptimizeBear(GlobalBear):
                            average_calculation,
                            poly_postprocessing,
                            exp_postprocessing,
-                           add_include_paths):
+                           extra_include_paths):
         self.debug("Optimizing condition", conditions[i].__name__, "...")
         best = (weightings[i], old_fitness)
         possible_weightings = [x/5 for x in range(11)]
@@ -135,7 +135,7 @@ class ClangCCOptimizeBear(GlobalBear):
             average_calculation=average_calculation,
             poly_postprocessing=poly_postprocessing,
             exp_postprocessing=exp_postprocessing,
-            add_include_paths=add_include_paths)
+            extra_include_paths=extra_include_paths)
 
         for fit, _mini, weighting in pool.imap(part_fitness,
                                                possible_weightings):
@@ -159,7 +159,7 @@ class ClangCCOptimizeBear(GlobalBear):
                             average_calculation,
                             poly_postprocessing,
                             exp_postprocessing,
-                            add_include_paths):
+                            extra_include_paths):
         fit, mini = fitness(self.file_dict,
                             conditions,
                             initial_weightings,
@@ -168,7 +168,7 @@ class ClangCCOptimizeBear(GlobalBear):
                             average_calculation,
                             poly_postprocessing,
                             exp_postprocessing,
-                            add_include_paths)
+                            extra_include_paths)
         self.debug("Initial fitness:", fit, ", minimal threshold:", mini)
         for i in range(len(initial_weightings)):
             fit = self.optimize_weighting(
@@ -181,7 +181,7 @@ class ClangCCOptimizeBear(GlobalBear):
                 average_calculation=average_calculation,
                 poly_postprocessing=poly_postprocessing,
                 exp_postprocessing=exp_postprocessing,
-                add_include_paths=add_include_paths)
+                extra_include_paths=extra_include_paths)
 
         return initial_weightings
 
@@ -197,7 +197,7 @@ class ClangCCOptimizeBear(GlobalBear):
             average_calculation: bool=False,
             poly_postprocessing: bool=True,
             exp_postprocessing: bool=False,
-            add_include_paths: path_list=()):
+            extra_include_paths: path_list=()):
         conditions = list(counting_conditions.keys())
         weightings = list(counting_conditions.values())
 
@@ -215,7 +215,7 @@ class ClangCCOptimizeBear(GlobalBear):
                 average_calculation=average_calculation,
                 poly_postprocessing=poly_postprocessing,
                 exp_postprocessing=exp_postprocessing,
-                add_include_paths=collect_dirs(list(add_include_paths)))
+                extra_include_paths=collect_dirs(list(extra_include_paths)))
             self.debug_weightings(conditions, weightings)
             if old != weightings:
                 self.debug("Continuing investigation.")

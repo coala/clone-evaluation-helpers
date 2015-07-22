@@ -1,7 +1,7 @@
 [DEFAULT]
 log_level = DEBUG
 files = ../coala/bears/**/clone_detection_samples/**/*.c
-add_include_paths = ../coala/bears/tests/codeclone_detection/*samples/
+extra_include_paths = ../coala/bears/tests/codeclone_detection/*samples/
 bear_dirs = ./src/**
 bears = ClangCloneDetectionBenchmarkBear
 
