@@ -21,6 +21,7 @@ sudo python3 setup.py install
 cd ..
 git clone https://github.com/coala-analyzer/clone-evaluation-helpers
 cd clone-evaluation-helpers
+sudo pip3 install -r requirements.txt
 coala
 ```
 
